@@ -3,7 +3,7 @@ PDF Filler
 
 A PDF form field data filler that uses FDF (Form Data Format) generator by Clark Van Oyen.
 
-PDF Filler requires the PDF ToolKit which can be found here: <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>
+PDF Filler requires the PDF ToolKit which can be found here: <a target="_blank" href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>
 
 ````javascript
 var fdf = require('fdf');
