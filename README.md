@@ -1,7 +1,7 @@
-PDF Filler
+PDF Filler (Node.js)
 ======
 
-A PDF form field data filler that uses FDF (Form Data Format) generator by <a target="_blank" href="https://github.com/countable">Clark Van Oyen</a>.
+A node.js PDF form field data filler that uses FDF (Form Data Format) generator by <a target="_blank" href="https://github.com/countable">Clark Van Oyen</a>.
 
 PDF Filler requires the PDF ToolKit which can be found here: <a target="_blank" href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>
 
