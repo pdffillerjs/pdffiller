@@ -14,10 +14,14 @@ var sourcePDF = "test/test.pdf";
 var destinationPDF =  "test/test_complete.pdf";
 
 var data = {
-    "first_name" : "John",
-    "last_name" : "Doe",
-    "age" : 20,
-    "gender" : "m"
+    "last_name" : "John",
+    "first_name" : "Doe",
+    "date" : "Jan 1, 2013",
+    "football" : "Off",
+    "baseball" : "Yes",
+    "basketball" : "Off",
+    "hockey" : "Yes",
+    "nascar" : "Off"
 };
 
 pdfFiller.fillForm( sourcePDF, destinationPDF, data );

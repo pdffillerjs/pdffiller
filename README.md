@@ -10,7 +10,7 @@ var pdfFiller = require('pdffiller');
 
 var data = {
     "first_name": "John",
-    "last_name": "Doe"
+    "last_name": "Doe",
     "age" : 77,
     "gender": "m"
 };
