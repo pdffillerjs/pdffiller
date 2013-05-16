@@ -1,6 +1,6 @@
 /*
 *   File:       pdf.js
-*   Project:    Simplified Rentals
+*   Project:    PDF Filler
 *   Date:       May 2013.
 *
 *   Description: This script will collect all the field objects from a given
