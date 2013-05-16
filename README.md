@@ -6,19 +6,23 @@ A PDF form field data filler that uses FDF (Form Data Format) generator by <a ta
 PDF Filler requires the PDF ToolKit which can be found here: <a target="_blank" href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>
 
 ````javascript
-var pdfFiller = require('pdffiller');
+var pdfFiller   = require( 'pdffiller' );
+
+var sourcePDF = "test/test.pdf";
+var destinationPDF =  "test/test_complete.pdf";
 
 var data = {
-    "first_name": "John",
-    "last_name": "Doe",
-    "age" : 77,
-    "gender": "m"
+    "last_name" : "John",
+    "first_name" : "Doe",
+    "date" : "Jan 1, 2013",
+    "football" : "Off",
+    "baseball" : "Yes",
+    "basketball" : "Off",
+    "hockey" : "Yes",
+    "nascar" : "Off"
 };
 
-var sourcePDF = "test.pdf";
-var destinationPDF = "test_filled_in.pdf";
-
-pdfFiller.fillForm(sourcePDF, destinationPDF, data);
+pdfFiller.fillForm( sourcePDF, destinationPDF, data );
 
 ````
 
