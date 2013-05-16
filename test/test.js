@@ -10,8 +10,8 @@
 
 var pdfFiller   = require( 'pdffiller' );
 
-var sourcePDF = "test.pdf";
-var destinationPDF = "test_complete.pdf";
+var sourcePDF = "test/test.pdf";
+var destinationPDF =  "test/test_complete.pdf";
 
 var data = {
     "first_name" : "John",

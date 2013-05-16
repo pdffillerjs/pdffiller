@@ -18,7 +18,7 @@ module.exports = {
 
         //Generate the data from the field values.
         var formData = fdf.generate( fieldValues ),
-            tempFDF = __dirname + "data.fdf";
+            tempFDF =  __dirname + "/data.fdf";
 
         //Write the temp fdf file.
         fs.writeFile( tempFDF, formData, function( err ) {
