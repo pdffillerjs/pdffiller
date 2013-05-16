@@ -1,11 +1,12 @@
 PDF Filler
 ======
 
-A PDF form field data filler.
+A PDF form field data filler that uses FDF (Form Data Format) generator by Clark Van Oyen.
+
+PDF Filler requires the PDF ToolKit which can be found here: <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>
 
 ````javascript
 var fdf = require('fdf');
-
 var pdfFiller = require('pdffiller');
 
 var data = fdf.generate({"name": "John Doe", "age" : 77});
