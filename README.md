@@ -22,7 +22,7 @@ var data = {
     "nascar" : "Off"
 };
 
-pdfFiller.fillForm( sourcePDF, destinationPDF, data );
+pdfFiller.fillForm( sourcePDF, destinationPDF, data, function() { console.log("In callback (we're done)."); } );
 
 ````
 
