@@ -1,6 +1,7 @@
 {
   "name": "pdffiller",
   "version": "0.0.1",
+  "private": true,
   "description": "Take an existing PDF Form and data and PDF Filler will create a new PDF with all given fields populated.",
   "main": "index.js",
   "scripts": {
@@ -11,24 +12,9 @@
     "lodash": "~3.8.0",
     "should": "6.0.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/whitef0x0/pdffiller"
-  },
   "author": {
     "name": "John Taylor and David Baldwynn"
   },
   "license": "MIT",
   "readmeFilename": "README.md",
-  "gitHead": "8db75c46f9aff797b6455d7914e889b6e65fb504",
-  "readme": "PDF Filler (Node.js)\n======\n\nA node.js PDF form field data filler that uses FDF (Form Data Format) generator by <a target=\"_blank\" href=\"https://github.com/countable\">Clark Van Oyen</a>.\n\nPDF Filler requires the PDF ToolKit which can be found here: <a target=\"_blank\" href=\"http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/\">PDF ToolKit</a>\n\n````javascript\nvar pdfFiller   = require( 'pdffiller' );\n\nvar sourcePDF = \"test/test.pdf\";\nvar destinationPDF =  \"test/test_complete.pdf\";\n\nvar data = {\n    \"last_name\" : \"John\",\n    \"first_name\" : \"Doe\",\n    \"date\" : \"Jan 1, 2013\",\n    \"football\" : \"Off\",\n    \"baseball\" : \"Yes\",\n    \"basketball\" : \"Off\",\n    \"hockey\" : \"Yes\",\n    \"nascar\" : \"Off\"\n};\n\npdfFiller.fillForm( sourcePDF, destinationPDF, data, function() { console.log(\"In callback (we're done).\"); } );\n\n````\n\nThis will take the test.pdf, fill the fields with the data values\nand create a complete filled in PDF (test_filled_in.pdf)\n",
-  "bugs": {
-    "url": "https://github.com/whitef0x0/pdffiller/issues"
-  },
-  "homepage": "https://github.com/whitef0x0/pdffiller",
-  "_id": "pdffiller@0.0.1",
-  "_shasum": "5b6e032090a3417e2736789ec915770319eefb4a",
-  "_from": "git://github.com/whitef0x0/pdffiller.git",
-  "_resolved": "git://github.com/whitef0x0/pdffiller.git#8db75c46f9aff797b6455d7914e889b6e65fb504",
-  "_fromGithub": true
 }
