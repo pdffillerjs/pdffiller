@@ -8,7 +8,7 @@ PDF Filler requires the PDF ToolKit which can be found here: <a target="_blank" 
 
 ##Examples
 
-###Fill PDF with existing FDF Data
+1. ####Fill PDF with existing FDF Data
 ````javascript
 var pdfFiller   = require( 'pdffiller' );
 
@@ -37,13 +37,13 @@ This will take the test.pdf, fill the fields with the data values
 and create a complete filled in PDF (test_filled_in.pdf)
 
 
-###Generate FDF Data from PDF
+2. ####Generate FDF Template from PDF
 ````javascript
 var pdfFiller   = require( 'pdffiller' );
 
 var sourcePDF = "test/test.pdf";
 
-var FDF_data = pdfFiller.generateFieldJson( sourcePDF, function(err, fdfData) { 
+var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, function(err, fdfData) { 
     if (err) throw err;
     console.log(fdfData);
 });
@@ -52,17 +52,42 @@ var FDF_data = pdfFiller.generateFieldJson( sourcePDF, function(err, fdfData) {
 
 This will print out this 
 ```{
-    "last_name" : "John",
-    "first_name" : "Doe",
-    "date" : "Jan 1, 2013",
-    "football" : "Off",
-    "baseball" : "Yes",
-    "basketball" : "Off",
-    "hockey" : "Yes",
-    "nascar" : "Off"
+    "last_name" : "",
+    "first_name" : "",
+    "date" : "",
+    "football" : "",
+    "baseball" : "",
+    "basketball" : "",
+    "hockey" : "",
+    "nascar" : ""
 };```
 
-###Map form fields to PDF fields
+3. ####Generate FDF Template from PDF
+````javascript
+var pdfFiller   = require( 'pdffiller' );
+
+var sourcePDF = "test/test.pdf";
+
+var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, function(err, fdfData) { 
+    if (err) throw err;
+    console.log(fdfData);
+});
+
+````
+
+This will print out this 
+```{
+    "last_name" : "",
+    "first_name" : "",
+    "date" : "",
+    "football" : "",
+    "baseball" : "",
+    "basketball" : "",
+    "hockey" : "",
+    "nascar" : ""
+};```
+
+4. ####Map form fields to PDF fields
 ````javascript
 var pdfFiller = require( 'pdffiller' ),
     sourcePDF = "test/test.pdf",
@@ -95,12 +120,11 @@ var FormFields = {
 pdfFiller.mapForm2PDF( data, convMap, function(err, mappedFields) { 
     if (err) throw err;
 
-    console.log(FDF_data);
-    pdfFiller.fillForm( sourcePDF, destinationPDF, FDF_data, function() { console.log("PDF Generated"); } );
+    console.log(mappedFields);
 });
 ````
 
-This will print out the object below and will generate a filled-out pdf.
+This will print out the object below.
 ```{
     "last_name" : "John",
     "first_name" : "Doe",
