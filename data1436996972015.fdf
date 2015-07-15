@@ -1,0 +1,40 @@
+%FDF-1.2
+%âãÏÓ
+1 0 obj 
+<<
+/FDF 
+<<
+/Fields [<<
+/V(John)
+/T(first_name)
+>><<
+/V(Doe)
+/T(last_name)
+>><<
+/V(Jan 1, 2013)
+/T(date)
+>><<
+/V(Off)
+/T(football)
+>><<
+/V(Yes)
+/T(baseball)
+>><<
+/V(Off)
+/T(basketball)
+>><<
+/V(Yes)
+/T(hockey)
+>><<
+/V(Off)
+/T(nascar)
+>>] 
+>>
+>>
+endobj 
+trailer
+
+<<
+/Root 1 0 R
+>>
+%%EOF

@@ -17,17 +17,17 @@ module.exports = {
 
     mapForm2PDF: function( formFields, convMap ){
         var tmpFDFData = this.convFieldJson2FDF(formFields);
-
-        _.mapKeys(tmpFDFData, function(value, key){
+        tmpFDFData = _.mapKeys(tmpFDFData, function(value, key){
             try {
                 convMap[key];
             } catch(err){
-                // console.log('conversion map error: ' + err.message);
+
                 return key;
             } 
             return convMap[key];
-            
         });
+
+        return tmpFDFData;
     },
 
     generateFieldJson: function( sourceFile, callback ){
@@ -45,7 +45,7 @@ module.exports = {
                 fields = stdout.toString().split("---").slice(1);
                 fields.forEach(function(field){
                     fieldObj = {};
-                    fieldObj['title'] = field.match(/FieldName:([A-Za-z\t .]+)/)[1].trim();
+                    fieldObj['title'] = field.match(/FieldName:([A-Za-z_\t .]+)/)[1].trim();
                     fieldObj['fieldType'] = field.match(/FieldType:([A-Za-z\t .]+)/)[1].trim();
                     fieldObj['fieldValue'] = '';
                     
@@ -70,8 +70,7 @@ module.exports = {
         });
 
     	var jsonObj = _.zipObject(_keys, _values);
-        // console.log(jsonObj);
-    
+
     	return jsonObj;
     },
     
