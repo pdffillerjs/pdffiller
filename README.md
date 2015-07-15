@@ -58,4 +58,57 @@ This will print out this
     "nascar" : "Off"
 };```
 
+###Map form fields to PDF fields
+````javascript
+var pdfFiller = require( 'pdffiller' ),
+    sourcePDF = "test/test.pdf",
+    FDF_data,
+    destinationPDF =  "test/test_complete.pdf";
+
+var conversionMap = {
+    "lastName": "last_name",
+    "firstName": "first_name",
+    "Date": "date",
+    "lastName": "last_name",
+    "footballField": "football",
+    "bballField": "basketball",
+    "baseballField": "baseball",
+    "hockeyField": "hockey",
+    "nascarField": "nascar"
+};
+
+var FormFields = {
+    "lastName" : "John",
+    "firstName" : "Doe",
+    "Date" : "Jan 1, 2013",
+    "footballField" : "Off",
+    "baseballField" : "Yes",
+    "bballField" : "Off",
+    "hockeyField" : "Yes",
+    "nascarField" : "Off"
+};
+
+try {
+    FDF_data = pdfFiller.mapForm2PDF(FormFields, conversionMap);
+}catch(err){
+    console.error(err);
+}else{
+    console.log(FDF_data);
+    pdfFiller.fillForm( sourcePDF, destinationPDF, FDF_data, function() { console.log("PDF Generated"); } );
+}
+
+````
+
+This will print out the object below and will generate a filled-out pdf.
+```{
+    "last_name" : "John",
+    "first_name" : "Doe",
+    "date" : "Jan 1, 2013",
+    "football" : "Off",
+    "baseball" : "Yes",
+    "basketball" : "Off",
+    "hockey" : "Yes",
+    "nascar" : "Off"
+};```
+
 
