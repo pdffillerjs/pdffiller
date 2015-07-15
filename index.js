@@ -21,8 +21,11 @@ module.exports = {
                 try {
                     convMap[key];
                 } catch(err){
-                    console.log('conversion map error: ' + err.message);
-                    throw err;
+                    // console.log('conversion map error: ' + err.message);
+                    return key;
+                    //callback err;
+                } else {
+                    return convMap[key];
                 }
             });
         });
@@ -38,7 +41,7 @@ module.exports = {
 
             if (error !== null) {
               console.log('exec error: ' + error);
-              throw error;
+              callback(error, null);
             } else {
                 fields = stdout.toString().split("---").slice(1);
                 fields.forEach(function(field){
@@ -48,7 +51,7 @@ module.exports = {
                     
                     formObj.push(fieldObj);
                 });
-                callback(formObj);
+                callback(null, formObj);
             }
         } );
     },
@@ -62,18 +65,18 @@ module.exports = {
         //Write the temp fdf file.
         fs.writeFile( tempFDF, formData, function( err ) {
 
-            if ( err ) throw err;
+            if ( err ) callback(err);
 
             exec( "pdftk " + sourceFile + " fill_form " + tempFDF + " output " + destinationFile + " flatten", function (error, stdout, stderr) {
 
                 if (err !== null) {
                   console.log('exec error: ' + err);
-                  throw err;
+                  callback(err);
                 } else {
                     //Delete the temporary fdf file.
                     fs.unlink( tempFDF, function( err ) {
 
-                        if ( err ) throw err;
+                        if ( err ) callback(err);
                         console.log( 'Sucessfully deleted temp file ' + tempFDF );
                         callback();
                     });
