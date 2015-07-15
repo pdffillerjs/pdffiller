@@ -1,7 +1,7 @@
 PDF Filler (Node.js)
 ======
 
-A node.js PDF form field data filler and generator that uses FDF (Form Data Format) generator by <a target="_blank" href="https://github.com/countable">Clark Van Oyen</a>.
+A node.js PDF form field data filler and FDF generator toolkit. This essentially is a wrapper around the PDF Toolkit library <a target="_blank" href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>.
 
 PDF Filler requires the PDF ToolKit which can be found here: <a target="_blank" href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>
 
@@ -26,7 +26,10 @@ var data = {
     "nascar" : "Off"
 };
 
-pdfFiller.fillForm( sourcePDF, destinationPDF, data, function() { console.log("In callback (we're done)."); } );
+pdfFiller.fillForm( sourcePDF, destinationPDF, data, function(err) { 
+    if (err) throw err;
+    console.log("In callback (we're done)."); 
+});
 
 ````
 
@@ -40,9 +43,10 @@ var pdfFiller   = require( 'pdffiller' );
 
 var sourcePDF = "test/test.pdf";
 
-var FDF_data = pdfFiller.generateFieldJson( sourcePDF, function(fdfData) { 
+var FDF_data = pdfFiller.generateFieldJson( sourcePDF, function(err, fdfData) { 
+    if (err) throw err;
     console.log(fdfData);
-} );
+});
 
 ````
 
@@ -88,15 +92,12 @@ var FormFields = {
     "nascarField" : "Off"
 };
 
-try {
-    FDF_data = pdfFiller.mapForm2PDF(FormFields, conversionMap);
-}catch(err){
-    console.error(err);
-}else{
+pdfFiller.mapForm2PDF( data, convMap, function(err, mappedFields) { 
+    if (err) throw err;
+
     console.log(FDF_data);
     pdfFiller.fillForm( sourcePDF, destinationPDF, FDF_data, function() { console.log("PDF Generated"); } );
-}
-
+});
 ````
 
 This will print out the object below and will generate a filled-out pdf.
