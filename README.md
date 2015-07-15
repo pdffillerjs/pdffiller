@@ -62,7 +62,7 @@ This will print out this
     "nascar" : ""
 };```
 
- #### 3. Generate FDF Template from PDF
+#### 3. Generate FDF Template from PDF
 ````javascript
 var pdfFiller   = require( 'pdffiller' );
 
@@ -76,7 +76,8 @@ var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, function(err, fdfData) 
 ````
 
 This will print out this 
-```{
+```
+{
     "last_name" : "",
     "first_name" : "",
     "date" : "",
@@ -85,9 +86,10 @@ This will print out this
     "basketball" : "",
     "hockey" : "",
     "nascar" : ""
-};```
+};
+```
 
- #### 4. Map form fields to PDF fields
+#### 4. Map form fields to PDF fields
 ````javascript
 var pdfFiller = require( 'pdffiller' ),
     sourcePDF = "test/test.pdf",
@@ -136,4 +138,68 @@ This will print out the object below.
     "nascar" : "Off"
 };```
 
+#### 5. Convert fieldJson to FDF data
+````javascript
+var pdfFiller   = require( 'pdffiller' );
 
+var sourcePDF = "test/test.pdf";
+var fieldJson = [
+    {
+        "title" : "last_name",
+        "fieldfieldType": "Text",
+        "fieldValue": "Doe"
+    },
+    {
+        "title" : "first_name",
+        "fieldfieldType": "Text",
+        "fieldValue": "John"
+    },
+    {
+        "title" : "date",
+        "fieldType": "Text",
+        "fieldValue": "Jan 1, 2013"
+    },
+    {
+        "title" : "football",
+        "fieldType": "Button",
+        "fieldValue": false
+    },
+    {
+        "title" : "baseball",
+        "fieldType": "Button",
+        "fieldValue": true
+    },
+    {
+        "title" : "basketball",
+        "fieldType": "Button"
+        "fieldValue": false
+    },
+    {
+        "title" : "hockey",
+        "fieldType": "Button"
+        "fieldValue": true
+    },
+    {
+        "title" : "nascar",
+        "fieldType": "Button"
+        "fieldValue": false
+    }
+];
+
+var FDFData = pdfFiller.convFieldJson2FDF( data );
+console.log(FDFData)
+````
+
+This will print out this 
+````
+{
+    "last_name" : "John",
+    "first_name" : "Doe",
+    "date" : "Jan 1, 2013",
+    "football" : "Off",
+    "baseball" : "Yes",
+    "basketball" : "Off",
+    "hockey" : "Yes",
+    "nascar" : "Off"
+};
+````
