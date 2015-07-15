@@ -8,7 +8,7 @@ PDF Filler requires the PDF ToolKit which can be found here: <a target="_blank" 
 
 ##Examples
 
-1. ####Fill PDF with existing FDF Data
+#### 1.Fill PDF with existing FDF Data
 ````javascript
 var pdfFiller   = require( 'pdffiller' );
 
@@ -37,7 +37,7 @@ This will take the test.pdf, fill the fields with the data values
 and create a complete filled in PDF (test_filled_in.pdf)
 
 
-2. ####Generate FDF Template from PDF
+#### 2. Generate FDF Template from PDF
 ````javascript
 var pdfFiller   = require( 'pdffiller' );
 
@@ -62,7 +62,7 @@ This will print out this
     "nascar" : ""
 };```
 
-3. ####Generate FDF Template from PDF
+ #### 3. Generate FDF Template from PDF
 ````javascript
 var pdfFiller   = require( 'pdffiller' );
 
@@ -87,7 +87,7 @@ This will print out this
     "nascar" : ""
 };```
 
-4. ####Map form fields to PDF fields
+ #### 4. Map form fields to PDF fields
 ````javascript
 var pdfFiller = require( 'pdffiller' ),
     sourcePDF = "test/test.pdf",
