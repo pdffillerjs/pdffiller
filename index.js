@@ -39,7 +39,7 @@ module.exports = {
         
         exec( "pdftk " + sourceFile + " dump_data_fields_utf8 " , function (error, stdout, stderr) {
 
-            if (error !== null) {
+            if (error) {
               console.log('exec error: ' + error);
               callback(error, null);
             } else {
@@ -48,12 +48,45 @@ module.exports = {
                     fieldObj = {};
                     fieldObj['title'] = field.match(/FieldName:([A-Za-z\t .]+)/)[1].trim();
                     fieldObj['fieldType'] = field.match(/FieldType:([A-Za-z\t .]+)/)[1].trim();
+                    fieldObj['fieldValue'] = '';
                     
                     formObj.push(fieldObj);
                 });
                 callback(null, formObj);
             }
         } );
+    },
+    
+    convertFieldJson2FDF: function(fieldJson, callback){
+        var _keys = _.pluck(this.form_fields, 'title'),
+		    _values = _.pluck(this.form_fields, 'fieldValue');
+
+    	_values.forEach(function(val){
+    		if(val === true){
+    			val = 'Yes';
+    		}else if(val === false) {
+    			val = 'Off';
+    		}
+    	});
+    
+    	var jsonObj = _.zipObject(_keys, _values);
+    
+    	callback(jsonObj);
+    },
+    
+    generateFDFTemplate: function( sourceFile, callback ){
+        this.generateFieldJson(sourceFile, function(err){
+            if (err) {
+              console.log('exec error: ' + error);
+              callback(error, null);
+            } else {
+                var _keys = _.pluck(this.form_fields, 'title'),
+        	    	_values = _.pluck(this.form_fields, 'fieldValue');
+        	    	
+            	var jsonObj = _.zipObject(_keys, _values);
+            	callback(null, jsonObj);
+            }
+        });
     },
 
     fillForm: function( sourceFile, destinationFile, fieldValues, callback ) {
