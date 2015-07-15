@@ -57,7 +57,7 @@ module.exports = {
         } );
     },
     
-    convertFieldJson2FDF: function(fieldJson, callback){
+    convFieldJson2FDF: function(fieldJson){
         var _keys = _.pluck(this.form_fields, 'title'),
 		    _values = _.pluck(this.form_fields, 'fieldValue');
 
@@ -71,11 +71,11 @@ module.exports = {
     
     	var jsonObj = _.zipObject(_keys, _values);
     
-    	callback(jsonObj);
+    	return jsonObj;
     },
     
     generateFDFTemplate: function( sourceFile, callback ){
-        this.generateFieldJson(sourceFile, function(err){
+        this.generateFieldJson(sourceFile, function(err, form_fields){
             if (err) {
               console.log('exec error: ' + error);
               callback(error, null);
