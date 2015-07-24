@@ -72,34 +72,7 @@ This will print out this
     "nascar" : ""
 };```
 
-#### 3. Generate FDF Template from PDF
-````javascript
-var pdfFiller   = require( 'pdffiller' );
-
-var sourcePDF = "test/test.pdf";
-
-var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, function(err, fdfData) { 
-    if (err) throw err;
-    console.log(fdfData);
-});
-
-````
-
-This will print out this 
-```
-{
-    "last_name" : "",
-    "first_name" : "",
-    "date" : "",
-    "football" : "",
-    "baseball" : "",
-    "basketball" : "",
-    "hockey" : "",
-    "nascar" : ""
-};
-```
-
-#### 4. Map form fields to PDF fields
+#### 3. Map form fields to PDF fields
 ````javascript
 var pdfFiller = require( 'pdffiller' ),
     sourcePDF = "test/test.pdf",
@@ -148,7 +121,7 @@ This will print out the object below.
     "nascar" : "Off"
 };```
 
-#### 5. Convert fieldJson to FDF data
+#### 4. Convert fieldJson to FDF data
 ````javascript
 var pdfFiller   = require( 'pdffiller' );
 
