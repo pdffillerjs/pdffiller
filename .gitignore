@@ -60,6 +60,6 @@ mongod
 *.tmp
 *.bak
 *.swp
+*.orig
 logs/
 build/
-
