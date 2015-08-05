@@ -7,7 +7,7 @@ A node.js PDF form field data filler and FDF generator toolkit. This essentially
 Quick start
 -----------
 
-First, run `npm install pdffiller --save` for your app. Then, in an Express app:
+First, run `npm install node-pdffiller --save` for your app. Then, in an Express app:
 
 ```js
 var pdfFiller = require('pdffiller');
