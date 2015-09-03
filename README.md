@@ -7,10 +7,10 @@ A node.js PDF form field data filler and FDF generator toolkit. This essentially
 Quick start
 -----------
 
-First, run `npm install node-pdffiller --save` for your app. Then, in an Express app:
+First, run `npm install pdffiller --save` for your app. Then, in an Express app:
 
 ```js
-var pdfFiller = require('node-pdffiller');
+var pdfFiller = require('pdffiller');
 
 // ...
 ```
@@ -20,7 +20,7 @@ var pdfFiller = require('node-pdffiller');
 
 #### 1.Fill PDF with existing FDF Data
 ````javascript
-var pdfFiller   = require( 'node-pdffiller' );
+var pdfFiller   = require( 'pdffiler' );
 
 var sourcePDF = "test/test.pdf";
 var destinationPDF =  "test/test_complete.pdf";
@@ -49,7 +49,7 @@ and create a complete filled in PDF (test_filled_in.pdf)
 
 #### 2. Generate FDF Template from PDF
 ````javascript
-var pdfFiller   = require( 'node-pdffiller' );
+var pdfFiller   = require( 'pdffiler' );
 
 var sourcePDF = "test/test.pdf";
 
@@ -74,7 +74,7 @@ This will print out this
 
 #### 3. Map form fields to PDF fields
 ````javascript
-var pdfFiller = require( 'node-pdffiller' ),
+var pdfFiller = require( 'pdffiler' ),
     sourcePDF = "test/test.pdf",
     FDF_data,
     destinationPDF =  "test/test_complete.pdf";
@@ -123,7 +123,7 @@ This will print out the object below.
 
 #### 4. Convert fieldJson to FDF data
 ````javascript
-var pdfFiller   = require( 'node-pdffiller' );
+var pdfFiller   = require( 'pdffiler' );
 
 var sourcePDF = "test/test.pdf";
 var fieldJson = [
