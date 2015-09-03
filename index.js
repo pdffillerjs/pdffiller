@@ -30,11 +30,13 @@ module.exports = {
         return tmpFDFData;
     },
 
-    generateFieldJson: function( sourceFile, callback ){
-        var regName = /FieldName:([A-Za-z\t .]+)/,
-            regType = /FieldType:([A-Za-z\t .]+)/,
-            formObj = Array(),
-            fieldObj = {};
+    generateFieldJson: function( sourceFile, nameRegex, callback ){
+        var regName = /FieldName: ([^\n]*)/,
+            regType = /FieldType: ([A-Za-z\t .]+)/,
+            fieldArray = [],
+            currField = {};
+        
+        if(nameRegex !== null ) regName = nameRegex;
         
         exec( "pdftk " + sourceFile + " dump_data_fields_utf8 " , function (error, stdout, stderr) {
 
@@ -44,14 +46,14 @@ module.exports = {
             } else {
                 fields = stdout.toString().split("---").slice(1);
                 fields.forEach(function(field){
-                    fieldObj = {};
-                    fieldObj['title'] = field.match(/FieldName:([A-Za-z_\t .]+)/)[1].trim();
-                    fieldObj['fieldType'] = field.match(/FieldType:([A-Za-z\t .]+)/)[1].trim();
-                    fieldObj['fieldValue'] = '';
+                    currField = {};
+                    currField['title'] = field.match(regName)[1].trim();
+                    currField['fieldType'] = field.match(regType)[1].trim();
+                    currField['fieldValue'] = '';
                     
-                    formObj.push(fieldObj);
+                    fieldArray.push(currField);
                 });
-                callback(null, formObj);
+                callback(null, fieldArray);
             }
         } );
     },
@@ -74,14 +76,15 @@ module.exports = {
     	return jsonObj;
     },
     
-    generateFDFTemplate: function( sourceFile, callback ){
-        this.generateFieldJson(sourceFile, function(err, form_fields){
+    generateFDFTemplate: function( sourceFile, nameRegex, callback ){
+        this.generateFieldJson(sourceFile, nameRegex, function(err, _form_fields){
             if (err) {
               console.log('exec error: ' + error);
               callback(error, null);
             } else {
-                var _keys = _.pluck(this.form_fields, 'title'),
-        	    	_values = _.pluck(this.form_fields, 'fieldValue');
+                var _keys = _.pluck(_form_fields, 'title');
+        	
+        	var _values = _.pluck(_form_fields, 'fieldValue');
         	    	
             	var jsonObj = _.zipObject(_keys, _values);
             	callback(null, jsonObj);
