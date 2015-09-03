@@ -75,13 +75,13 @@ module.exports = {
     },
     
     generateFDFTemplate: function( sourceFile, callback ){
-        this.generateFieldJson(sourceFile, function(err, form_fields){
+        this.generateFieldJson(sourceFile, function(err, _form_fields){
             if (err) {
               console.log('exec error: ' + error);
               callback(error, null);
             } else {
-                var _keys = _.pluck(this.form_fields, 'title'),
-        	    	_values = _.pluck(this.form_fields, 'fieldValue');
+                var _keys = _.pluck(_form_fields, 'title'),
+        	    _values = _.pluck(_form_fields, 'fieldValue');
         	    	
             	var jsonObj = _.zipObject(_keys, _values);
             	callback(null, jsonObj);
