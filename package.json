@@ -1,12 +1,19 @@
 {
-  "name": "node-pdffiller",
-  "version": "0.0.5",
+  "name": "pdffiller",
+  "version": "0.0.7",
   "private": false,
   "description": "Take an existing PDF Form and data and PDF Filler will create a new PDF with all given fields populated.",
   "main": "index.js",
   "scripts": {
     "test": "node test/test.js"
   },
+  "keywords": [
+    "nodejs",
+    "pdftk",
+    "fdf",
+    "pdffiller",
+    "pdf"
+  ],
   "dependencies": {
     "fdf": "*",
     "lodash": "~3.8.0",
