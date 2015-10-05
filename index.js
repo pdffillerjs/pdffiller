@@ -61,32 +61,33 @@
             exec( "pdftk " + sourceFile + " dump_data_fields_utf8 " , function (error, stdout, stderr) {
                 if (error) {
                     console.log('exec error: ' + error);
-                    callback(error, null);
-                } else {
-                    fields = stdout.toString().split("---").slice(1);
-                    fields.forEach(function(field){
-                        currField = {};
-                        
-                        currField['title'] = field.match(regName)[1].trim() || ''; 
-
-                        if(field.match(regType)){
-                            currField['fieldType'] = field.match(regType)[1].trim() || '';  
-                        }else {
-                            currField['fieldType'] = '';
-                        }
-
-                        if(field.match(regFlags)){
-                            currField['fieldFlags'] = field.match(regFlags)[1].trim()|| '';
-                        }else{ 
-                            currField['fieldFlags'] = '';
-                        }
-
-                        currField['fieldValue'] = '';
-                        
-                        fieldArray.push(currField);
-                    });
-                    callback(null, fieldArray);
+                    return callback(error, null);
                 }
+                
+                fields = stdout.toString().split("---").slice(1);
+                fields.forEach(function(field){
+                    currField = {};
+                    
+                    currField['title'] = field.match(regName)[1].trim() || ''; 
+
+                    if(field.match(regType)){
+                        currField['fieldType'] = field.match(regType)[1].trim() || '';  
+                    }else {
+                        currField['fieldType'] = '';
+                    }
+
+                    if(field.match(regFlags)){
+                        currField['fieldFlags'] = field.match(regFlags)[1].trim()|| '';
+                    }else{ 
+                        currField['fieldFlags'] = '';
+                    }
+
+                    currField['fieldValue'] = '';
+                    
+                    fieldArray.push(currField);
+                });
+                
+                return callback(null, fieldArray);
             });
         },
         
@@ -94,15 +95,14 @@
             this.generateFieldJson(sourceFile, nameRegex, function(err, _form_fields){
                 if (err) {
                   console.log('exec error: ' + err);
-                  callback(err, null);
-                } else {
-                    var _keys = _.pluck(_form_fields, 'title');
-            	
-            	var _values = _.pluck(_form_fields, 'fieldValue');
-            	    	
-                	var jsonObj = _.zipObject(_keys, _values);
-                	callback(null, jsonObj);
+                  return callback(err, null);
                 }
+                var _keys   = _.pluck(_form_fields, 'title'),
+            	    _values = _.pluck(_form_fields, 'fieldValue'),
+                    jsonObj = _.zipObject(_keys, _values);
+                
+                return callback(null, jsonObj);
+                
             });
         },
 
@@ -115,22 +115,25 @@
             //Write the temp fdf file.
             fs.writeFile( tempFDF, formData, function( err ) {
 
-                if ( err ) callback(err);
+                if ( err ) {
+                    return callback(err);
+                }
 
                 child_process.exec( "pdftk " + sourceFile + " fill_form " + tempFDF + " output " + destinationFile + " flatten", function (error, stdout, stderr) {
 
                     if ( error ) {
                       console.log('exec error: ' + error);
-                      callback(error);
-                    } else {
-                        //Delete the temporary fdf file.
-                        fs.unlink( tempFDF, function( err ) {
-
-                            if ( err ) callback(err);
-                            // console.log( 'Sucessfully deleted temp file ' + tempFDF );
-                            callback();
-                        });
+                      return callback(error);
                     }
+                    //Delete the temporary fdf file.
+                    fs.unlink( tempFDF, function( err ) {
+
+                        if ( err ) {
+                            return callback(err);
+                        }
+                        // console.log( 'Sucessfully deleted temp file ' + tempFDF );
+                        return callback();
+                    });
                 } );
             });
         }
