@@ -119,9 +119,9 @@
 
                 child_process.exec( "pdftk " + sourceFile + " fill_form " + tempFDF + " output " + destinationFile + " flatten", function (error, stdout, stderr) {
 
-                    if ( err ) {
-                      console.log('exec error: ' + err);
-                      callback(err);
+                    if ( error ) {
+                      console.log('exec error: ' + error);
+                      callback(error);
                     } else {
                         //Delete the temporary fdf file.
                         fs.unlink( tempFDF, function( err ) {
