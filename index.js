@@ -112,9 +112,7 @@
             //Generate the data from the field values.
             var tmpFileobj = tmp.fileSync({unsafeCleanup:false});
             var formData = fdf.generate( fieldValues ),
-                //tempFDF = "data" + (new Date().getTime()) + ".fdf";
-                tempFDF= tmpFileobj.name+".data" + (new Date().getTime()) +".fdf";
-            console.log('created Temp File - '+tempFDF);
+                tempFDF= tmpFileobj.name+'.'+new Date().getTime() +".fdf";
 
             //Write the temp fdf file.
             fs.writeFile( tempFDF, formData, function( err ) {
