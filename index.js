@@ -10,6 +10,7 @@
     var sys = require('sys'),
         child_process = require('child_process'),
         exec = require('child_process').exec,
+        tmp=require('tmp'),
         fdf = require('fdf'),
         _ = require('lodash'),
         fs = require('fs');
@@ -109,8 +110,10 @@
         fillForm: function( sourceFile, destinationFile, fieldValues, callback ) {
 
             //Generate the data from the field values.
+            var tmpFileobj = tmp.fileSync({unsafeCleanup:false});
             var formData = fdf.generate( fieldValues ),
-                tempFDF = "data" + (new Date().getTime()) + ".fdf";
+                //tempFDF = "data" + (new Date().getTime()) + ".fdf";
+                tempFDF= tmpFileobj.name+".data" + (new Date().getTime()) +".fdf";
             console.log('created Temp File - '+tempFDF);
 
             //Write the temp fdf file.

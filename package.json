@@ -17,7 +17,8 @@
   "dependencies": {
     "fdf": "*",
     "lodash": "~3.8.0",
-    "should": "6.0.1"
+    "should": "6.0.1",
+    "tmp": "0.0.28"
   },
   "author": {
     "name": "John Taylor and David Baldwynn"
