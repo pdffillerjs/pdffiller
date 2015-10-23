@@ -110,6 +110,7 @@
         fillForm: function( sourceFile, destinationFile, fieldValues, callback ) {
 
             //Generate the data from the field values.
+            tmp.setGracefulCleanup();
             var tmpFileobj = tmp.fileSync({unsafeCleanup:false});
             var formData = fdf.generate( fieldValues ),
                 tempFDF= tmpFileobj.name+'.'+new Date().getTime() +".fdf";
