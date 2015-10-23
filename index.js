@@ -24,7 +24,7 @@
                 } catch(err){
 
                     return key;
-                } 
+                }
                 return convMap[key];
             });
 
@@ -55,7 +55,7 @@
                 regFlags = /FieldFlags: ([0-9\t .]+)/,
                 fieldArray = [],
                 currField = {};
-            
+
             if(nameRegex !== null && (typeof nameRegex) == 'object' ) regName = nameRegex;
 
             exec( "pdftk " + sourceFile + " dump_data_fields_utf8 " , function (error, stdout, stderr) {
@@ -63,34 +63,34 @@
                     console.log('exec error: ' + error);
                     return callback(error, null);
                 }
-                
+
                 fields = stdout.toString().split("---").slice(1);
                 fields.forEach(function(field){
                     currField = {};
-                    
-                    currField['title'] = field.match(regName)[1].trim() || ''; 
+
+                    currField['title'] = field.match(regName)[1].trim() || '';
 
                     if(field.match(regType)){
-                        currField['fieldType'] = field.match(regType)[1].trim() || '';  
+                        currField['fieldType'] = field.match(regType)[1].trim() || '';
                     }else {
                         currField['fieldType'] = '';
                     }
 
                     if(field.match(regFlags)){
                         currField['fieldFlags'] = field.match(regFlags)[1].trim()|| '';
-                    }else{ 
+                    }else{
                         currField['fieldFlags'] = '';
                     }
 
                     currField['fieldValue'] = '';
-                    
+
                     fieldArray.push(currField);
                 });
-                
+
                 return callback(null, fieldArray);
             });
         },
-        
+
         generateFDFTemplate: function( sourceFile, nameRegex, callback ){
             this.generateFieldJson(sourceFile, nameRegex, function(err, _form_fields){
                 if (err) {
@@ -100,9 +100,9 @@
                 var _keys   = _.pluck(_form_fields, 'title'),
             	    _values = _.pluck(_form_fields, 'fieldValue'),
                     jsonObj = _.zipObject(_keys, _values);
-                
+
                 return callback(null, jsonObj);
-                
+
             });
         },
 
@@ -111,6 +111,7 @@
             //Generate the data from the field values.
             var formData = fdf.generate( fieldValues ),
                 tempFDF = "data" + (new Date().getTime()) + ".fdf";
+            console.log('created Temp File - '+tempFDF);
 
             //Write the temp fdf file.
             fs.writeFile( tempFDF, formData, function( err ) {
