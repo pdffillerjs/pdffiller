@@ -36,9 +36,9 @@ var data = {
     "nascar" : "Off"
 };
 
-pdfFiller.fillForm( sourcePDF, destinationPDF, data, function(err) { 
+pdfFiller.fillForm( sourcePDF, destinationPDF, data, function(err) {
     if (err) throw err;
-    console.log("In callback (we're done)."); 
+    console.log("In callback (we're done).");
 });
 
 ````
@@ -53,14 +53,14 @@ var pdfFiller   = require('pdffiller');
 
 var sourcePDF = "test/test.pdf";
 
-var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, function(err, fdfData) { 
+var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, nameRegex, function(err, fdfData) { 
     if (err) throw err;
     console.log(fdfData);
 });
 
 ````
 
-This will print out this 
+This will print out this
 ```{
     "last_name" : "",
     "first_name" : "",
@@ -102,7 +102,7 @@ var FormFields = {
     "nascarField" : "Off"
 };
 
-pdfFiller.mapForm2PDF( data, convMap, function(err, mappedFields) { 
+pdfFiller.mapForm2PDF( data, convMap, function(err, mappedFields) {
     if (err) throw err;
 
     console.log(mappedFields);
@@ -173,7 +173,7 @@ var FDFData = pdfFiller.convFieldJson2FDF( data );
 console.log(FDFData)
 ````
 
-This will print out this 
+This will print out this
 ````
 {
     "last_name" : "John",
