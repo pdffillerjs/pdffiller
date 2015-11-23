@@ -7,8 +7,7 @@
 *                PDF file with the form fields populated.
 */
 (function(){
-    var sys = require('sys'),
-        child_process = require('child_process'),
+    var child_process = require('child_process'),
         exec = require('child_process').exec,
         fdf = require('fdf'),
         _ = require('lodash'),
