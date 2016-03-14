@@ -52,9 +52,10 @@
             var regName = /FieldName: ([^\n]*)/,
                 regType = /FieldType: ([A-Za-z\t .]+)/,
                 regFlags = /FieldFlags: ([0-9\t .]+)/,
+                regOptions = /FieldStateOption: ([^\n]*)/g,
                 fieldArray = [],
                 currField = {};
-            
+
             if(nameRegex !== null && (typeof nameRegex) == 'object' ) regName = nameRegex;
 
             exec( "pdftk " + sourceFile + " dump_data_fields_utf8 " , function (error, stdout, stderr) {
@@ -62,30 +63,37 @@
                     console.log('exec error: ' + error);
                     return callback(error, null);
                 }
-                
-                fields = stdout.toString().split("---").slice(1);
+
+                var fields = stdout.toString().split("---").slice(1);
                 fields.forEach(function(field){
                     currField = {};
-                    
-                    currField['title'] = field.match(regName)[1].trim() || ''; 
+
+                    currField['title'] = field.match(regName)[1].trim() || '';
 
                     if(field.match(regType)){
-                        currField['fieldType'] = field.match(regType)[1].trim() || '';  
+                        currField['fieldType'] = field.match(regType)[1].trim() || '';
                     }else {
                         currField['fieldType'] = '';
                     }
 
                     if(field.match(regFlags)){
                         currField['fieldFlags'] = field.match(regFlags)[1].trim()|| '';
-                    }else{ 
+                    }else{
                         currField['fieldFlags'] = '';
                     }
 
+                    var fieldOptions = field.match(regOptions);
+                    if(fieldOptions && fieldOptions.length > 0){
+                        currField['options'] = _.map(fieldOptions, function(option){
+                            return option.trim() || '';
+                        });
+                    }
+
                     currField['fieldValue'] = '';
-                    
+
                     fieldArray.push(currField);
                 });
-                
+
                 return callback(null, fieldArray);
             });
         },
