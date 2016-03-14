@@ -53,6 +53,7 @@
                 regType = /FieldType: ([A-Za-z\t .]+)/,
                 regFlags = /FieldFlags: ([0-9\t .]+)/,
                 regOptions = /FieldStateOption: ([^\n]*)/g,
+                individualRegOptions = /FieldStateOption: ([^\n]*)/,
                 fieldArray = [],
                 currField = {};
 
@@ -85,7 +86,7 @@
                     var fieldOptions = field.match(regOptions);
                     if(fieldOptions && fieldOptions.length > 0){
                         currField['options'] = _.map(fieldOptions, function(option){
-                            return option.trim() || '';
+                            return option.match(individualRegOptions)[1].trim() || '';
                         });
                     }
 
