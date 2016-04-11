@@ -5,7 +5,7 @@
   "description": "Take an existing PDF Form and data and PDF Filler will create a new PDF with all given fields populated.",
   "main": "index.js",
   "scripts": {
-    "test": "node test/test.js"
+    "test": "node_modules/.bin/mocha test/test.js"
   },
   "keywords": [
     "nodejs",
@@ -15,9 +15,8 @@
     "pdf"
   ],
   "dependencies": {
-    "fdf": "*",
     "lodash": "~3.8.0",
-    "should": "6.0.1"
+    "utf8-fdf-generator": "0.0.3"
   },
   "author": {
     "name": "John Taylor and David Baldwynn"
@@ -29,5 +28,9 @@
   "_id": "pdffiller@0.0.5",
   "_shasum": "416c724b748a5e0caf494fb66b043d450b8a3b9a",
   "_from": "whitef0x0/pdffiller",
-  "_resolved": "git://github.com/whitef0x0/pdffiller.git#dc344fd81d90d0434dcc253d9ee14e4328b680dd"
+  "_resolved": "git://github.com/whitef0x0/pdffiller.git#dc344fd81d90d0434dcc253d9ee14e4328b680dd",
+  "devDependencies": {
+    "mocha": "~2.4.5",
+    "should": "~6.0.1"
+  }
 }
