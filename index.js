@@ -118,7 +118,7 @@
 
             //Generate the data from the field values.
             var formData = fdf.generate( fieldValues ),
-                tempFDF = "data" + (new Date().getTime()) + ".fdf";
+                tempFDF = "data" + performance.now() + ".fdf";
 
             //Write the temp fdf file.
             fs.writeFile( tempFDF, formData, function( err ) {
