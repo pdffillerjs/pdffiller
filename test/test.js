@@ -35,7 +35,7 @@ describe('pdfFiller Tests', function(){
 
         it('should not throw an error when creating test_complete.pdf from test.pdf with filled data', function(done) {
             this.timeout(15000);
-            pdfFiller.fillForm( source2PDF, dest2PDF, _data, function(err) {
+            pdfFiller.fillForm( source2PDF, dest2PDF, _data, true, function(err) {
                 should.not.exist(err);
                 done();
             });
