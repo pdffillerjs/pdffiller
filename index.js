@@ -105,7 +105,7 @@
             });
         },
 
-        fillForm: function( sourceFile, destinationFile, fieldValues, shouldFlatten,  callback ) {
+        fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten,  callback ) {
 
             //Generate the data from the field values.
             var tempFDF = "data" + (new Date().getTime()) + ".fdf",
@@ -129,7 +129,12 @@
                     return callback();
                 });
             } );
+        },
+
+        fillForm: function( sourceFile, destinationFile, fieldValues, callback) {
+            this.fillFormWithFlatten( sourceFile, destinationFile, fieldValues, true, callback);
         }
+
     };
 
     module.exports = pdffiller;
