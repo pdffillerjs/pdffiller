@@ -52,6 +52,8 @@
             var regName = /FieldName: ([^\n]*)/,
                 regType = /FieldType: ([A-Za-z\t .]+)/,
                 regFlags = /FieldFlags: ([0-9\t .]+)/,
+                regOptions = /FieldStateOption: ([^\n]*)/g,
+                individualRegOptions = /FieldStateOption: ([^\n]*)/,
                 fieldArray = [],
                 currField = {};
 
@@ -63,7 +65,7 @@
                     return callback(error, null);
                 }
 
-                fields = stdout.toString().split("---").slice(1);
+                var fields = stdout.toString().split("---").slice(1);
                 fields.forEach(function(field){
                     currField = {};
 
@@ -79,6 +81,13 @@
                         currField['fieldFlags'] = field.match(regFlags)[1].trim()|| '';
                     }else{
                         currField['fieldFlags'] = '';
+                    }
+
+                    var fieldOptions = field.match(regOptions);
+                    if(fieldOptions && fieldOptions.length > 0){
+                        currField['options'] = _.map(fieldOptions, function(option){
+                            return option.match(individualRegOptions)[1].trim() || '';
+                        });
                     }
 
                     currField['fieldValue'] = '';
@@ -108,8 +117,8 @@
         fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten,  callback ) {
 
             //Generate the data from the field values.
-            var tempFDF = "data" + (new Date().getTime()) + ".fdf",
-                formData = fdf.generator( fieldValues, tempFDF );
+            var formData = fdf.generate( fieldValues ),
+                tempFDF = "data" + process.hrtime()[1] + ".fdf";
 
             var flatArg = shouldFlatten ? " flatten" : "";
 
