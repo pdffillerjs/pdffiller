@@ -40,6 +40,31 @@ describe('pdfFiller Tests', function(){
                 done();
             });
         });
+
+        it('should create an completely filled PDF that is read-only', function(done) {
+            this.timeout(15000);
+            pdfFiller.fillForm( source2PDF, dest2PDF, _data, true, function(err) {
+                pdfFiller.generateFieldJson(dest2PDF, null, function(err, fdfData) {
+                    fdfData.length.should.equal(0);
+                    done();
+                });
+            });
+        });
+
+        it('should create an unflattened PDF with unfilled fields remaining', function(done) {
+            this.timeout(15000);
+            var source3PDF = source2PDF;
+            var dest3PDF = "test/test_complete3.pdf";
+            var _data2 = { 
+                "first_name": "Jerry",
+            };
+            pdfFiller.fillForm( source3PDF, dest3PDF, _data2, false, function(err) {
+                pdfFiller.generateFieldJson(dest3PDF, null, function(err, fdfData) {
+                    fdfData.length.should.not.equal(0);
+                    done();
+                });
+            });
+        });
     });
 
     describe('generateFieldJson()', function(){
