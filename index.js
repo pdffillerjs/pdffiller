@@ -9,7 +9,7 @@
 (function(){
     var child_process = require('child_process'),
         exec = require('child_process').exec,
-        fdf = require('fdf'),
+        fdf = require('utf8-fdf-generator'),
         _ = require('lodash'),
         fs = require('fs');
 
@@ -23,7 +23,7 @@
                 } catch(err){
 
                     return key;
-                } 
+                }
                 return convMap[key];
             });
 
@@ -98,7 +98,7 @@
                 return callback(null, fieldArray);
             });
         },
-        
+
         generateFDFTemplate: function( sourceFile, nameRegex, callback ){
             this.generateFieldJson(sourceFile, nameRegex, function(err, _form_fields){
                 if (err) {
@@ -106,47 +106,47 @@
                   return callback(err, null);
                 }
                 var _keys   = _.pluck(_form_fields, 'title'),
-            	    _values = _.pluck(_form_fields, 'fieldValue'),
+                  _values = _.pluck(_form_fields, 'fieldValue'),
                     jsonObj = _.zipObject(_keys, _values);
-                
+
                 return callback(null, jsonObj);
-                
+
             });
         },
 
-        fillForm: function( sourceFile, destinationFile, fieldValues, callback ) {
+        fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten,  callback ) {
 
             //Generate the data from the field values.
-            var formData = fdf.generate( fieldValues ),
-                tempFDF = "data" + process.hrtime()[1] + ".fdf";
+            var tempFDF = "data" + process.hrtime()[1] + ".fdf";
+            var formData = fdf.generator( fieldValues, tempFDF );
+            
 
-            //Write the temp fdf file.
-            fs.writeFile( tempFDF, formData, function( err ) {
+            var flatArg = (shouldFlatten === true) ? " flatten" : "";
 
-                if ( err ) {
-                    return callback(err);
+            child_process.exec( "pdftk " + sourceFile + " fill_form " + tempFDF + " output " + destinationFile + flatArg, function (error, stdout, stderr) {
+
+                if ( error ) {
+                    console.log('exec error: ' + error);
+                    return callback(error);
                 }
+                //Delete the temporary fdf file.
+                fs.unlink( tempFDF, function( err ) {
 
-                child_process.exec( "pdftk " + sourceFile + " fill_form " + tempFDF + " output " + destinationFile + " flatten", function (error, stdout, stderr) {
-
-                    if ( error ) {
-                      console.log('exec error: ' + error);
-                      return callback(error);
+                    if ( err ) {
+                        return callback(err);
                     }
-                    //Delete the temporary fdf file.
-                    fs.unlink( tempFDF, function( err ) {
+                    // console.log( 'Sucessfully deleted temp file ' + tempFDF );
+                    return callback();
+                });
+            } );
+        },
 
-                        if ( err ) {
-                            return callback(err);
-                        }
-                        // console.log( 'Sucessfully deleted temp file ' + tempFDF );
-                        return callback();
-                    });
-                } );
-            });
+        fillForm: function( sourceFile, destinationFile, fieldValues, callback) {
+            this.fillFormWithFlatten( sourceFile, destinationFile, fieldValues, true, callback);
         }
+
     };
 
     module.exports = pdffiller;
 
-}())
+}());
