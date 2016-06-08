@@ -117,10 +117,11 @@
         fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten,  callback ) {
 
             //Generate the data from the field values.
-            var formData = fdf.generate( fieldValues ),
-                tempFDF = "data" + process.hrtime()[1] + ".fdf";
+            var tempFDF = "data" + process.hrtime()[1] + ".fdf";
+            var formData = fdf.generator( fieldValues, tempFDF );
+            
 
-            var flatArg = shouldFlatten ? " flatten" : "";
+            var flatArg = (shouldFlatten === true) ? " flatten" : "";
 
             child_process.exec( "pdftk " + sourceFile + " fill_form " + tempFDF + " output " + destinationFile + flatArg, function (error, stdout, stderr) {
 
@@ -148,4 +149,4 @@
 
     module.exports = pdffiller;
 
-}())
+}());
