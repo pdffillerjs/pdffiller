@@ -105,13 +105,15 @@
             });
         },
 
-        fillForm: function( sourceFile, destinationFile, fieldValues, callback ) {
+        fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten,  callback ) {
 
             //Generate the data from the field values.
             var tempFDF = "data" + (new Date().getTime()) + ".fdf",
                 formData = fdf.generator( fieldValues, tempFDF );
 
-            child_process.exec( "pdftk " + sourceFile + " fill_form " + tempFDF + " output " + destinationFile + " flatten", function (error, stdout, stderr) {
+            var flatArg = shouldFlatten ? " flatten" : "";
+
+            child_process.exec( "pdftk " + sourceFile + " fill_form " + tempFDF + " output " + destinationFile + flatArg, function (error, stdout, stderr) {
 
                 if ( error ) {
                     console.log('exec error: ' + error);
@@ -127,7 +129,12 @@
                     return callback();
                 });
             } );
+        },
+
+        fillForm: function( sourceFile, destinationFile, fieldValues, callback) {
+            this.fillFormWithFlatten( sourceFile, destinationFile, fieldValues, true, callback);
         }
+
     };
 
     module.exports = pdffiller;
