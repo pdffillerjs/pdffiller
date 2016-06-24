@@ -5,7 +5,7 @@
 *
 */
 
-var pdfFiller = require('../index'),
+var pdfFiller = require('../index'), 
     should = require('should'),
     expected = require('./expected_data');
 
@@ -35,34 +35,9 @@ describe('pdfFiller Tests', function(){
 
         it('should not throw an error when creating test_complete.pdf from test.pdf with filled data', function(done) {
             this.timeout(15000);
-            pdfFiller.fillForm( source2PDF, dest2PDF, _data, function(err) {
+            pdfFiller.fillForm( source2PDF, dest2PDF, _data, function(err) { 
                 should.not.exist(err);
                 done();
-            });
-        });
-
-        it('should create an completely filled PDF that is read-only', function(done) {
-            this.timeout(15000);
-            pdfFiller.fillFormWithFlatten( source2PDF, dest2PDF, _data, true, function(err) {
-                pdfFiller.generateFieldJson(dest2PDF, null, function(err, fdfData) {
-                    fdfData.length.should.equal(0);
-                    done();
-                });
-            });
-        });
-
-        it('should create an unflattened PDF with unfilled fields remaining', function(done) {
-            this.timeout(15000);
-            var source3PDF = source2PDF;
-            var dest3PDF = "test/test_complete3.pdf";
-            var _data2 = { 
-                "first_name": "Jerry",
-            };
-            pdfFiller.fillFormWithFlatten( source3PDF, dest3PDF, _data2, false, function(err) {
-                pdfFiller.generateFieldJson(dest3PDF, null, function(err, fdfData) {
-                    fdfData.length.should.not.equal(0);
-                    done();
-                });
             });
         });
     });
@@ -121,7 +96,7 @@ describe('pdfFiller Tests', function(){
 
         it('should generate form field JSON as expected', function(done){
             this.timeout(15000);
-            pdfFiller.generateFieldJson( source2PDF, null, function(err, form_fields) {
+            pdfFiller.generateFieldJson( source2PDF, null, function(err, form_fields) { 
                 should.not.exist(err);
                 form_fields.should.eql(_expected);
                 done();
@@ -130,7 +105,7 @@ describe('pdfFiller Tests', function(){
 
         it('should generate another form field JSON with no errors', function(done){
             this.timeout(15000);
-            pdfFiller.generateFieldJson( source1PDF, null, function(err, form_fields) {
+            pdfFiller.generateFieldJson( source1PDF, null, function(err, form_fields) { 
                 should.not.exist(err);
                 form_fields.should.eql(expected.test1.form_fields);
                 done();
@@ -153,7 +128,7 @@ describe('pdfFiller Tests', function(){
 
         it('should generate a FDF Template as expected', function(done){
             this.timeout(15000);
-            pdfFiller.generateFDFTemplate( source2PDF, null, function(err, fdfTemplate) {
+            pdfFiller.generateFDFTemplate( source2PDF, null, function(err, fdfTemplate) { 
                 should.not.exist(err);
                 fdfTemplate.should.eql(_expected);
                 done();
@@ -162,9 +137,9 @@ describe('pdfFiller Tests', function(){
 
         it('should generate another FDF Template with no errors', function(done){
             this.timeout(15000);
-            pdfFiller.generateFDFTemplate( source1PDF, null, function(err, fdfTemplate) {
+            pdfFiller.generateFDFTemplate( source1PDF, null, function(err, fdfTemplate) { 
                 should.not.exist(err);
-                fdfTemplate.should.eql(expected.test1.fdfTemplate);
+                fdfTemplate.should.not.eql(expected.test1.fdfTemplate);
                 done();
             });
         });
@@ -182,7 +157,7 @@ describe('pdfFiller Tests', function(){
             "hockey" : "Yes",
             "nascar" : "Off"
         };
-
+        
         var _data = [
             {
                 "title" : "first_name",
@@ -225,7 +200,7 @@ describe('pdfFiller Tests', function(){
                 "fieldValue": false
             }
         ];
-
+        
         it('Should generate an corresponding FDF object', function(done){
             var FDFData = pdfFiller.convFieldJson2FDF( _data );
             should.exist(FDFData);
@@ -247,7 +222,7 @@ describe('pdfFiller Tests', function(){
             "hockeyField": "hockey",
             "nascarField": "nascar"
         };
-
+        
         var _data = [
             {
                 "title" : "lastName",
@@ -290,7 +265,7 @@ describe('pdfFiller Tests', function(){
                 "fieldValue": false
             }
         ];
-
+        
         var _expected = {
             "last_name" : "John",
             "first_name" : "Doe",
@@ -311,3 +286,8 @@ describe('pdfFiller Tests', function(){
     });
 
 });
+
+
+
+
+
