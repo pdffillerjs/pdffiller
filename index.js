@@ -8,7 +8,7 @@
 */
 (function(){
     var child_process = require('child_process'),
-        exec = require('child_process').exec,
+        execFile = require('child_process').execFile,
         fdf = require('utf8-fdf-generator'),
         _ = require('lodash'),
         fs = require('fs');
@@ -57,7 +57,7 @@
 
             if(nameRegex !== null && (typeof nameRegex) == 'object' ) regName = nameRegex;
 
-            exec( "pdftk " + sourceFile + " dump_data_fields_utf8 " , function (error, stdout, stderr) {
+            execFile( "pdftk", [sourceFile, "dump_data_fields_utf8"], function (error, stdout, stderr) {
                 if (error) {
                     console.log('exec error: ' + error);
                     return callback(error, null);
@@ -111,9 +111,11 @@
             var tempFDF = "data" + (new Date().getTime()) + ".fdf",
                 formData = fdf.generator( fieldValues, tempFDF );
 
-            var flatArg = shouldFlatten ? " flatten" : "";
-
-            child_process.exec( "pdftk " + sourceFile + " fill_form " + tempFDF + " output " + destinationFile + flatArg, function (error, stdout, stderr) {
+            var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile];
+            if (shouldFlatten) {
+                args.push("flatten");
+            }
+            execFile( "pdftk", args, function (error, stdout, stderr) {
 
                 if ( error ) {
                     console.log('exec error: ' + error);
