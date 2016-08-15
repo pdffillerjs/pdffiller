@@ -96,11 +96,8 @@
                   console.log('exec error: ' + err);
                   return callback(err, null);
                 }
-                var _keys   = _.pluck(_form_fields, 'title'),
-                  _values = _.pluck(_form_fields, 'fieldValue'),
-                    jsonObj = _.zipObject(_keys, _values);
 
-                return callback(null, jsonObj);
+                return callback(null, convFieldJson2FDF(_form_fields));
 
             });
         },
