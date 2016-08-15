@@ -104,8 +104,8 @@
 
         fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten,  callback ) {
 
-            //Generate the data from the field values.
-            var tempFDF = "data" + (new Date().getTime()) + ".fdf",
+            //Generate the temporary data from the field values.
+            var tempFDF = "temporary_" + (new Date().getTime()) + ".fdf",
                 formData = fdf.generator( fieldValues, tempFDF );
 
             var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile];
