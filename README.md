@@ -45,8 +45,8 @@ pdfFiller.fillForm( sourcePDF, destinationPDF, data, shouldFlatten, function(err
 
 This will take the test.pdf, fill the fields with the data values
 and create a complete filled in PDF (test_filled_in.pdf). Note that the
-resulting pdf will be read-only, as `shouldFlatten` is set to true. Calling 
-`fillForm()` with `shouldFlatten = false` will leave any unmapped fields 
+resulting pdf will be read-only, as `shouldFlatten` is set to true. Calling
+`fillForm()` with `shouldFlatten = false` will leave any unmapped fields
 still editable, as per the `pdftk` command specification.
 
 
@@ -56,7 +56,10 @@ var pdfFiller   = require('pdffiller');
 
 var sourcePDF = "test/test.pdf";
 
-var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, nameRegex, function(err, fdfData) { 
+// Override the default field name regex. Default: /FieldName: ([^\n]*)/
+var nameRegex = null;  
+
+var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, nameRegex, function(err, fdfData) {
     if (err) throw err;
     console.log(fdfData);
 });
