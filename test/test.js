@@ -43,7 +43,17 @@ describe('pdfFiller Tests', function(){
 
         it('should create an completely filled PDF that is read-only', function(done) {
             this.timeout(15000);
-            pdfFiller.fillFormWithFlatten( source2PDF, dest2PDF, _data, true, function(err) {
+            pdfFiller.fillFormWithFlatten( source2PDF, dest2PDF, _data, true, undefined, function(err) {
+                pdfFiller.generateFieldJson(dest2PDF, null, function(err, fdfData) {
+                    fdfData.length.should.equal(0);
+                    done();
+                });
+            });
+        });
+
+        it('should create an completely filled PDF that is read-only and with an specific temporary folder for FDF files', function(done) {
+            this.timeout(15000);
+            pdfFiller.fillFormWithFlatten( source2PDF, dest2PDF, _data, true, './', function(err) {
                 pdfFiller.generateFieldJson(dest2PDF, null, function(err, fdfData) {
                     fdfData.length.should.equal(0);
                     done();
@@ -55,10 +65,10 @@ describe('pdfFiller Tests', function(){
             this.timeout(15000);
             var source3PDF = source2PDF;
             var dest3PDF = "test/test_complete3.pdf";
-            var _data2 = { 
+            var _data2 = {
                 "first_name": "Jerry",
             };
-            pdfFiller.fillFormWithFlatten( source3PDF, dest3PDF, _data2, false, function(err) {
+            pdfFiller.fillFormWithFlatten( source3PDF, dest3PDF, _data2, false, undefined, function(err) {
                 pdfFiller.generateFieldJson(dest3PDF, null, function(err, fdfData) {
                     fdfData.length.should.not.equal(0);
                     done();
