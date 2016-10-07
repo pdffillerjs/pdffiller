@@ -105,7 +105,7 @@
             });
         },
 
-        fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten, tempFDFPath, callback ) {
+        fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, shouldFlatten, tempFDFPath, callback ) {
 
             //Generate the data from the field values.
             var tempFDFFile =  "data" + (new Date().getTime()) + ".fdf",
@@ -134,8 +134,12 @@
             } );
         },
 
+        fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten, callback ) {
+            this.fillFormWithOptions( sourceFile, destinationFile, fieldValues, shouldFlatten, undefined, callback);
+        },
+
         fillForm: function( sourceFile, destinationFile, fieldValues, callback) {
-            this.fillFormWithFlatten( sourceFile, destinationFile, fieldValues, true, undefined, callback);
+            this.fillFormWithFlatten( sourceFile, destinationFile, fieldValues, true, callback);
         }
 
     };
