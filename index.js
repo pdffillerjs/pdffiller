@@ -108,7 +108,9 @@
         fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, shouldFlatten, tempFDFPath, callback ) {
 
             //Generate the data from the field values.
-            var tempFDFFile =  "data" + (new Date().getTime()) + ".fdf",
+            var randomSequence = Math.random().toString(36).substring(7);
+            var currentTime = new Date().getTime();
+            var tempFDFFile =  "data" + currentTime + randomSequence + ".fdf",
                 tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile),
                 formData = fdf.generator( fieldValues, tempFDF );
 
