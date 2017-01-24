@@ -24,7 +24,7 @@ describe('pdfFiller Tests', function(){
 
         var _data = {
             "first_name" : "1) John",
-            "last_name" : "(2) Doe",
+            "last_name" : "Doe",
             "date" : "Jan 1, 2013",
             "football" : "Off",
             "baseball" : "Yes",
