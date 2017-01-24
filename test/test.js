@@ -23,8 +23,8 @@ describe('pdfFiller Tests', function(){
     describe('fillForm()', function(){
 
         var _data = {
-            "first_name" : "John",
-            "last_name" : "Doe",
+            "first_name" : "1) John",
+            "last_name" : "(2) Doe",
             "date" : "Jan 1, 2013",
             "football" : "Off",
             "baseball" : "Yes",
