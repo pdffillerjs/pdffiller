@@ -15,7 +15,7 @@
     "pdf"
   ],
   "dependencies": {
-    "lodash": "~3.8.0",
+    "lodash": "^4.17.4",
     "utf8-fdf-generator": "0.0.3"
   },
   "author": {
@@ -30,7 +30,7 @@
   "_from": "whitef0x0/pdffiller",
   "_resolved": "git://github.com/whitef0x0/pdffiller.git#dc344fd81d90d0434dcc253d9ee14e4328b680dd",
   "devDependencies": {
-    "mocha": "~2.4.5",
-    "should": "~6.0.1"
+    "mocha": "^3.2.0",
+    "should": "^11.1.2"
   }
 }

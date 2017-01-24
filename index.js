@@ -31,8 +31,8 @@
         },
 
         convFieldJson2FDF: function(fieldJson){
-            var _keys = _.pluck(fieldJson, 'title'),
-                _values = _.pluck(fieldJson, 'fieldValue');
+            var _keys = _.map(fieldJson, 'title'),
+                _values = _.map(fieldJson, 'fieldValue');
 
             _values = _.map(_values, function(val){
                 if(val === true){
@@ -96,8 +96,8 @@
                   console.log('exec error: ' + err);
                   return callback(err, null);
                 }
-                var _keys   = _.pluck(_form_fields, 'title'),
-                  _values = _.pluck(_form_fields, 'fieldValue'),
+                var _keys   = _.map(_form_fields, 'title'),
+                  _values = _.map(_form_fields, 'fieldValue'),
                     jsonObj = _.zipObject(_keys, _values);
 
                 return callback(null, jsonObj);
