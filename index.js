@@ -102,10 +102,15 @@
             });
         },
 
-        fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten,  callback ) {
+        fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, shouldFlatten, tempFDFPath, callback ) {
 
-            //Generate the temporary data from the field values.
-            var tempFDF = "temporary_" + (new Date().getTime()) + ".fdf",
+
+            //Generate the data from the field values.
+            var randomSequence = Math.random().toString(36).substring(7);
+            var currentTime = new Date().getTime();
+            var tempFDFFile =  "temp_data" + currentTime + randomSequence + ".fdf",
+                tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile),
+
                 formData = fdf.generator( fieldValues, tempFDF );
 
             var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile];
@@ -128,6 +133,10 @@
                     return callback();
                 });
             } );
+        },
+
+        fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten, callback ) {
+            this.fillFormWithOptions( sourceFile, destinationFile, fieldValues, shouldFlatten, undefined, callback);
         },
 
         fillForm: function( sourceFile, destinationFile, fieldValues, callback) {

@@ -1,6 +1,7 @@
 PDF Filler (Node.js)
 ======
 [![NPM](https://nodei.co/npm/pdffiller.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/pdffiller/)
+
 A node.js PDF form field data filler and FDF generator toolkit. This essentially is a wrapper around the PDF Toolkit library <a target="_blank" href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>.
 
 
@@ -16,7 +17,7 @@ var pdfFiller = require('pdffiller');
 ```
 
 
-##Examples
+## Examples
 
 #### 1.Fill PDF with existing FDF Data
 ````javascript
@@ -24,7 +25,6 @@ var pdfFiller   = require('pdffiller');
 
 var sourcePDF = "test/test.pdf";
 var destinationPDF =  "test/test_complete.pdf";
-var shouldFlatten = true;
 var data = {
     "last_name" : "John",
     "first_name" : "Doe",
@@ -36,7 +36,7 @@ var data = {
     "nascar" : "Off"
 };
 
-pdfFiller.fillForm( sourcePDF, destinationPDF, data, shouldFlatten, function(err) {
+pdfFiller.fillForm( sourcePDF, destinationPDF, data, function(err) {
     if (err) throw err;
     console.log("In callback (we're done).");
 });
@@ -45,8 +45,22 @@ pdfFiller.fillForm( sourcePDF, destinationPDF, data, shouldFlatten, function(err
 
 This will take the test.pdf, fill the fields with the data values
 and create a complete filled in PDF (test_filled_in.pdf). Note that the
-resulting pdf will be read-only, as `shouldFlatten` is set to true. Calling 
-`fillForm()` with `shouldFlatten = false` will leave any unmapped fields 
+resulting PDF will be read-only.
+
+Alternatively,
+
+````javascript
+
+var shouldFlatten = false;
+
+pdfFiller.fillFormWithFlatten( sourcePDF, destinationPDF, data, shouldFlatten, function(err) {
+    if (err) throw err;
+    console.log("In callback (we're done).");
+})
+````
+
+Calling
+`fillFormWithFlatten()` with `shouldFlatten = false` will leave any unmapped fields
 still editable, as per the `pdftk` command specification.
 
 
@@ -56,7 +70,10 @@ var pdfFiller   = require('pdffiller');
 
 var sourcePDF = "test/test.pdf";
 
-var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, nameRegex, function(err, fdfData) { 
+// Override the default field name regex. Default: /FieldName: ([^\n]*)/
+var nameRegex = null;  
+
+var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, nameRegex, function(err, fdfData) {
     if (err) throw err;
     console.log(fdfData);
 });
