@@ -96,22 +96,21 @@
                   console.log('exec error: ' + err);
                   return callback(err, null);
                 }
-                var _keys   = _.pluck(_form_fields, 'title'),
-                  _values = _.pluck(_form_fields, 'fieldValue'),
-                    jsonObj = _.zipObject(_keys, _values);
 
-                return callback(null, jsonObj);
+                return callback(null, convFieldJson2FDF(_form_fields));
 
             });
         },
 
         fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, shouldFlatten, tempFDFPath, callback ) {
 
+
             //Generate the data from the field values.
             var randomSequence = Math.random().toString(36).substring(7);
             var currentTime = new Date().getTime();
-            var tempFDFFile =  "data" + currentTime + randomSequence + ".fdf",
+            var tempFDFFile =  "temp_data" + currentTime + randomSequence + ".fdf",
                 tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile),
+
                 formData = fdf.generator( fieldValues, tempFDF );
 
             var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile];
