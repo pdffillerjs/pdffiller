@@ -97,9 +97,9 @@
                   return callback(err, null);
                 }
 
-                return callback(null, convFieldJson2FDF(_form_fields));
+                return callback(null, this.convFieldJson2FDF(_form_fields));
 
-            });
+            }.bind(this));
         },
 
         fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, shouldFlatten, tempFDFPath, callback ) {
