@@ -8,7 +8,9 @@ A node.js PDF form field data filler and FDF generator toolkit. This essentially
 Quick start
 -----------
 
-First, run `npm install pdffiller --save` for your app. Then, in an Express app:
+First, run `npm install pdffiller --save` for your app.
+
+Import the module using:
 
 ```js
 var pdfFiller = require('pdffiller');
@@ -177,7 +179,6 @@ This will print out the object below.
 ````javascript
 var pdfFiller   = require('pdffiller');
 
-var sourcePDF = "test/test.pdf";
 var fieldJson = [
     {
         "title" : "last_name",
@@ -221,7 +222,7 @@ var fieldJson = [
     }
 ];
 
-var FDFData = pdfFiller.convFieldJson2FDF( data );
+var FDFData = pdfFiller.convFieldJson2FDF( fieldJson );
 console.log(FDFData)
 ````
 
