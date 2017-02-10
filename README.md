@@ -81,7 +81,8 @@ var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, nameRegex, function(err
 ````
 
 This will print out this
-```{
+```
+{
     "last_name" : "",
     "first_name" : "",
     "date" : "",
@@ -90,7 +91,8 @@ This will print out this
     "basketball" : "",
     "hockey" : "",
     "nascar" : ""
-};```
+};
+```
 
 #### 3. Map form fields to PDF fields
 ````javascript
@@ -158,7 +160,8 @@ console.log(mappedFields);
 ````
 
 This will print out the object below.
-```{
+```
+{
     "last_name" : "John",
     "first_name" : "Doe",
     "date" : "Jan 1, 2013",
@@ -167,7 +170,8 @@ This will print out the object below.
     "basketball" : "Off",
     "hockey" : "Yes",
     "nascar" : "Off"
-};```
+};
+```
 
 #### 4. Convert fieldJson to FDF data
 ````javascript
