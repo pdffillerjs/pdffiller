@@ -98,10 +98,7 @@ This will print out this
 
 #### 3. Map form fields to PDF fields
 ````javascript
-var pdfFiller = require('pdffiller'),
-    sourcePDF = "test/test.pdf",
-    FDF_data,
-    destinationPDF =  "test/test_complete.pdf";
+var pdfFiller = require('pdffiller');
 
 var convMap = {
     "lastName": "last_name",
