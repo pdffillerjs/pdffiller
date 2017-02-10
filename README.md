@@ -111,22 +111,50 @@ var conversionMap = {
     "nascarField": "nascar"
 };
 
-var FormFields = {
-    "lastName" : "John",
-    "firstName" : "Doe",
-    "Date" : "Jan 1, 2013",
-    "footballField" : "Off",
-    "baseballField" : "Yes",
-    "bballField" : "Off",
-    "hockeyField" : "Yes",
-    "nascarField" : "Off"
-};
+var fieldJson = [
+    {
+        "title" : "last_name",
+        "fieldfieldType": "Text",
+        "fieldValue": "Doe"
+    },
+    {
+        "title" : "first_name",
+        "fieldfieldType": "Text",
+        "fieldValue": "John"
+    },
+    {
+        "title" : "date",
+        "fieldType": "Text",
+        "fieldValue": "Jan 1, 2013"
+    },
+    {
+        "title" : "football",
+        "fieldType": "Button",
+        "fieldValue": false
+    },
+    {
+        "title" : "baseball",
+        "fieldType": "Button",
+        "fieldValue": true
+    },
+    {
+        "title" : "basketball",
+        "fieldType": "Button"
+        "fieldValue": false
+    },
+    {
+        "title" : "hockey",
+        "fieldType": "Button"
+        "fieldValue": true
+    },
+    {
+        "title" : "nascar",
+        "fieldType": "Button"
+        "fieldValue": false
+    }
+];
 
-pdfFiller.mapForm2PDF( data, convMap, function(err, mappedFields) {
-    if (err) throw err;
-
-    console.log(mappedFields);
-});
+var mappedFields = pdfFiller.mapForm2PDF( fieldJson, convMap );
 ````
 
 This will print out the object below.
