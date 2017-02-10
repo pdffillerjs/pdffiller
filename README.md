@@ -99,57 +99,56 @@ var pdfFiller = require('pdffiller'),
     FDF_data,
     destinationPDF =  "test/test_complete.pdf";
 
-var conversionMap = {
+var convMap = {
     "lastName": "last_name",
     "firstName": "first_name",
     "Date": "date",
-    "lastName": "last_name",
     "footballField": "football",
-    "bballField": "basketball",
     "baseballField": "baseball",
+    "bballField": "basketball",
     "hockeyField": "hockey",
     "nascarField": "nascar"
 };
 
 var fieldJson = [
     {
-        "title" : "last_name",
-        "fieldfieldType": "Text",
-        "fieldValue": "Doe"
-    },
-    {
-        "title" : "first_name",
+        "title" : "lastName",
         "fieldfieldType": "Text",
         "fieldValue": "John"
     },
     {
-        "title" : "date",
+        "title" : "firstName",
+        "fieldfieldType": "Text",
+        "fieldValue": "Doe"
+    },
+    {
+        "title" : "Date",
         "fieldType": "Text",
         "fieldValue": "Jan 1, 2013"
     },
     {
-        "title" : "football",
+        "title" : "footballField",
         "fieldType": "Button",
         "fieldValue": false
     },
     {
-        "title" : "baseball",
+        "title" : "baseballField",
         "fieldType": "Button",
         "fieldValue": true
     },
     {
-        "title" : "basketball",
-        "fieldType": "Button"
+        "title" : "bballField",
+        "fieldType": "Button",
         "fieldValue": false
     },
     {
-        "title" : "hockey",
-        "fieldType": "Button"
+        "title" : "hockeyField",
+        "fieldType": "Button",
         "fieldValue": true
     },
     {
-        "title" : "nascar",
-        "fieldType": "Button"
+        "title" : "nascarField",
+        "fieldType": "Button",
         "fieldValue": false
     }
 ];
