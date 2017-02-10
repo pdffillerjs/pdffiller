@@ -155,6 +155,7 @@ var fieldJson = [
 ];
 
 var mappedFields = pdfFiller.mapForm2PDF( fieldJson, convMap );
+console.log(mappedFields);
 ````
 
 This will print out the object below.
