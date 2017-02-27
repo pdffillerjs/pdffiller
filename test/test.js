@@ -1,15 +1,16 @@
 /*
-*   File:       pdf.js
+*   File:       test.js
 *   Project:    PDF Filler
 *   Date:       June 2015.
 *
 */
 
-var pdfFiller = require('../index'),
-    should = require('should'),
+
+var should = require('should'),
     expected = require('./expected_data');
 
-var dest2PDF =  "test/test_complete2.pdf",
+var source3PDF = "test/test2.pdf",
+    dest2PDF =  "test/test_complete.pdf",
     source2PDF = "test/test.pdf",
     dest1PDF =  "test/test_complete1.pdf",
     source1PDF = "test/test1.pdf";
@@ -19,7 +20,7 @@ var dest2PDF =  "test/test_complete2.pdf",
  * Unit tests
  */
 describe('pdfFiller Tests', function(){
-
+    var pdfFiller = require('../index');
     describe('fillForm()', function(){
 
         var _data = {
@@ -76,7 +77,7 @@ describe('pdfFiller Tests', function(){
             });
         });
     });
-
+    /*
     describe('generateFieldJson()', function(){
         var _expected = [
             {
@@ -319,5 +320,81 @@ describe('pdfFiller Tests', function(){
             done();
         });
     });
+    */
+});
 
+describe('pdfFiller with keepExistingValues Tests', function(){
+    var pdfFiller = require('../index');
+    pdfFiller.setOptions({keepExistingValues: true});
+
+    describe('generateFieldJson()', function(){
+        var _expected = [
+            {
+                "fieldFlags": "0",
+                "title" : "first_name",
+                "fieldValue": "Wendy",
+                "fieldType": "Text"
+            },
+            {
+                "fieldFlags": "0",
+                "title" : "last_name",
+                "fieldValue": "Smith",
+                "fieldType": "Text"
+            },
+            {
+                "fieldFlags": "0",
+                "title" : "date",
+                "fieldValue": "",
+                "fieldType": "Text"
+            },
+            {
+                "fieldFlags": "0",
+                "title" : "football",
+                "fieldValue": "",
+                "fieldType": "Button"
+            },
+            {
+                "fieldFlags": "0",
+                "title" : "baseball",
+                "fieldValue": "",
+                "fieldType": "Button"
+            },
+            {
+                "fieldFlags": "0",
+                "title" : "basketball",
+                "fieldValue": "",
+                "fieldType": "Button"
+            },
+            {
+                "fieldFlags": "0",
+                "title" : "nascar",
+                "fieldValue": "",
+                "fieldType": "Button"
+            },
+            {
+                "fieldFlags": "0",
+                "title" : "hockey",
+                "fieldValue": "",
+                "fieldType": "Button"
+            }
+        ];
+
+        it('should generate form field JSON as expected', function(done){
+            this.timeout(15000);
+            pdfFiller.generateFieldJson( source3PDF, null, function(err, form_fields) {
+                should.not.exist(err);
+                form_fields.should.eql(_expected);
+                done();
+            });
+        });
+
+        it('should generate another form field JSON with no errors', function(done){
+            this.timeout(15000);
+            pdfFiller.generateFieldJson( source1PDF, null, function(err, form_fields) {
+                should.not.exist(err);
+                form_fields.should.eql(expected.test1.form_fields);
+                done();
+            });
+        });
+    });
 });

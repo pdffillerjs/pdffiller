@@ -62,7 +62,8 @@
                 regFlags = /FieldFlags: ([0-9\t .]+)/,
                 regValue = /FieldValue: ([^\n]*)/,
                 fieldArray = [],
-                currField = {};
+                currField = {},
+                that = this;
 
             if(nameRegex !== null && (typeof nameRegex) == 'object' ) regName = nameRegex;
 
@@ -78,7 +79,7 @@
 
                     currField['title'] = field.match(regName)[1].trim() || '';
 
-                    if(this.currOptions.keepExistingValues && field.match(regType)){
+                    if(that.currOpts.keepExistingValues && field.match(regType)){
                         currField['fieldType'] = field.match(regType)[1].trim() || '';
                     }else {
                         currField['fieldType'] = '';
@@ -116,22 +117,21 @@
         },
 
         fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, shouldFlatten, tempFDFPath, callback ) {
-
-
             //Generate the data from the field values.
             var randomSequence = Math.random().toString(36).substring(7);
             var currentTime = new Date().getTime();
             var tempFDFFile =  "temp_data" + currentTime + randomSequence + ".fdf",
                 tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile),
-
                 formData = fdf.generator( fieldValues, tempFDF );
 
             var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile];
             if (shouldFlatten) {
                 args.push("flatten");
             }
+            debugger;
             execFile( "pdftk", args, function (error, stdout, stderr) {
 
+                debugger;
                 if ( error ) {
                     console.log('exec error: ' + error);
                     return callback(error);
