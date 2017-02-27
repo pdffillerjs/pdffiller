@@ -82,7 +82,7 @@
                         currField['fieldFlags'] = '';
                     }
                     
-                    if(field.match(regFlags)){
+                    if(field.match(regValue)){
                         currField['fieldValue'] = field.match(regValue)[1].trim() || '';
                     }else{
                         currField['fieldValue'] = '';
