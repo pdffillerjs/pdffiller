@@ -14,7 +14,7 @@ Import the module using:
 
 ```
 js
-var pdfFiller = require('pdffiller');
+var pdfFiller = require('pdffiller-keepfields');
 
 // ...
 ```
@@ -25,7 +25,7 @@ var pdfFiller = require('pdffiller');
 #### 1.Fill PDF with existing FDF Data
 ```
 javascript
-var pdfFiller   = require('pdffiller');
+var pdfFiller   = require('pdffiller-keepfields');
 
 var sourcePDF = "test/test.pdf";
 var destinationPDF =  "test/test_complete.pdf";
@@ -72,7 +72,7 @@ still editable, as per the `pdftk` command specification.
 #### 2. Generate FDF Template from PDF
 ```
 javascript
-var pdfFiller   = require('pdffiller');
+var pdfFiller   = require('pdffiller-keepfields');
 
 var sourcePDF = "test/test.pdf";
 
@@ -103,7 +103,7 @@ This will print out this
 #### 3. Map form fields to PDF fields
 ```
 javascript
-var pdfFiller = require('pdffiller');
+var pdfFiller = require('pdffiller-keepfields');
 
 var convMap = {
     "lastName": "last_name",
@@ -180,7 +180,7 @@ This will print out the object below.
 #### 4. Convert fieldJson to FDF data
 ```
 javascript
-var pdfFiller   = require('pdffiller');
+var pdfFiller   = require('pdffiller-keepfields');
 
 var fieldJson = [
     {
