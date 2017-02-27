@@ -6,14 +6,24 @@
 *   Description: This PDF filler module takes a data set and creates a filled out
 *                PDF file with the form fields populated.
 */
-(function(){
+(function(opt){
     var child_process = require('child_process'),
         execFile = require('child_process').execFile,
         fdf = require('utf8-fdf-generator'),
         _ = require('lodash'),
         fs = require('fs');
+    
+    var defaultOpts = {
+        keepExistingValues: false
+    };
+
+    opt = opt || {};
 
     var pdffiller = {
+        currOpts: {},
+        setOptions: function(opts){
+            this.currOpts = opts;
+        },
 
         mapForm2PDF: function( formFields, convMap ){
             var tmpFDFData = this.convFieldJson2FDF(formFields);
@@ -52,8 +62,10 @@
             var regName = /FieldName: ([^\n]*)/,
                 regType = /FieldType: ([A-Za-z\t .]+)/,
                 regFlags = /FieldFlags: ([0-9\t .]+)/,
+                regValue = /FieldValue: ([^\n]*)/,
                 fieldArray = [],
-                currField = {};
+                currField = {},
+                that = this;
 
             if(nameRegex !== null && (typeof nameRegex) == 'object' ) regName = nameRegex;
 
@@ -69,19 +81,28 @@
 
                     currField['title'] = field.match(regName)[1].trim() || '';
 
-                    if(field.match(regType)){
+                    if(that.currOpts.keepExistingValues && field.match(regType)){
                         currField['fieldType'] = field.match(regType)[1].trim() || '';
                     }else {
                         currField['fieldType'] = '';
                     }
-
+                     
                     if(field.match(regFlags)){
-                        currField['fieldFlags'] = field.match(regFlags)[1].trim()|| '';
+                        currField['fieldFlags'] = field.match(regFlags)[1].trim() || '';
                     }else{
                         currField['fieldFlags'] = '';
                     }
-
-                    currField['fieldValue'] = '';
+                    
+                    if (opt.keep) {
+                        if(field.match(regValue)){
+                            currField['fieldValue'] = field.match(regValue)[1].trim() || '';
+                        }else{
+                            currField['fieldValue'] = '';
+                        }
+                    }else{
+                        currField['fieldValue'] = '';
+                    }
+                    
 
                     fieldArray.push(currField);
                 });
@@ -103,22 +124,21 @@
         },
 
         fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, shouldFlatten, tempFDFPath, callback ) {
-
-
             //Generate the data from the field values.
             var randomSequence = Math.random().toString(36).substring(7);
             var currentTime = new Date().getTime();
             var tempFDFFile =  "temp_data" + currentTime + randomSequence + ".fdf",
                 tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile),
-
                 formData = fdf.generator( fieldValues, tempFDF );
 
             var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile];
             if (shouldFlatten) {
                 args.push("flatten");
             }
+            debugger;
             execFile( "pdftk", args, function (error, stdout, stderr) {
 
+                debugger;
                 if ( error ) {
                     console.log('exec error: ' + error);
                     return callback(error);
@@ -129,7 +149,6 @@
                     if ( err ) {
                         return callback(err);
                     }
-                    // console.log( 'Sucessfully deleted temp file ' + tempFDF );
                     return callback();
                 });
             } );
@@ -145,6 +164,8 @@
 
     };
 
+    pdffiller.setOptions(defaultOpts);
+        
     module.exports = pdffiller;
 
 }())

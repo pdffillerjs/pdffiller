@@ -1,3 +1,7 @@
+# Testing Files
+./test/test_complete*
+temp_data*
+
 node_modules/*
 !node_modules/pdffiller/
 *.fdf

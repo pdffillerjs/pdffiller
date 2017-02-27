@@ -1,3 +1,7 @@
+# Testing Files
+./test/test_complete*
+temp_data*
+
 # iOS / Apple
 # ===========
 .DS_Store

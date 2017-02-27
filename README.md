@@ -4,7 +4,6 @@ PDF Filler (Node.js)
 
 A node.js PDF form field data filler and FDF generator toolkit. This essentially is a wrapper around the PDF Toolkit library <a target="_blank" href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>.
 
-
 Quick start
 -----------
 
@@ -12,17 +11,40 @@ First, run `npm install pdffiller --save` for your app.
 
 Import the module using:
 
-```js
+```javascript
 var pdfFiller = require('pdffiller');
 
 // ...
 ```
 
+If you want to keep existing values from a form when using pdffiller make sure to specify this before using the module with the code below.
+
+```javascript
+pdfFiller.setOptions({keepExistingValues: true});
+
+// ...
+```
+
+Development
+-----------
+
+First clone this repository.
+
+Then, run tests with `npm run test` before commencing development.
+=======
+If you'd like to list out the contents of the form values in your source PDF, import the module as follows:
+
+```
+js
+var pdfFiller = require('pdffiller')({ keep: true });
+
+// ...
+```
 
 ## Examples
 
 #### 1.Fill PDF with existing FDF Data
-````javascript
+```javascript
 var pdfFiller   = require('pdffiller');
 
 var sourcePDF = "test/test.pdf";
@@ -43,7 +65,7 @@ pdfFiller.fillForm( sourcePDF, destinationPDF, data, function(err) {
     console.log("In callback (we're done).");
 });
 
-````
+```
 
 This will take the test.pdf, fill the fields with the data values
 and create a complete filled in PDF (test_filled_in.pdf). Note that the
@@ -51,7 +73,7 @@ resulting PDF will be read-only.
 
 Alternatively,
 
-````javascript
+```javascript
 
 var shouldFlatten = false;
 
@@ -59,7 +81,7 @@ pdfFiller.fillFormWithFlatten( sourcePDF, destinationPDF, data, shouldFlatten, f
     if (err) throw err;
     console.log("In callback (we're done).");
 })
-````
+```
 
 Calling
 `fillFormWithFlatten()` with `shouldFlatten = false` will leave any unmapped fields
@@ -67,7 +89,7 @@ still editable, as per the `pdftk` command specification.
 
 
 #### 2. Generate FDF Template from PDF
-````javascript
+```javascript
 var pdfFiller   = require('pdffiller');
 
 var sourcePDF = "test/test.pdf";
@@ -80,10 +102,10 @@ var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, nameRegex, function(err
     console.log(fdfData);
 });
 
-````
+```
 
 This will print out this
-```
+```json
 {
     "last_name" : "",
     "first_name" : "",
@@ -97,7 +119,7 @@ This will print out this
 ```
 
 #### 3. Map form fields to PDF fields
-````javascript
+```javascript
 var pdfFiller = require('pdffiller');
 
 var convMap = {
@@ -156,10 +178,10 @@ var fieldJson = [
 
 var mappedFields = pdfFiller.mapForm2PDF( fieldJson, convMap );
 console.log(mappedFields);
-````
+```
 
 This will print out the object below.
-```
+```json
 {
     "last_name" : "John",
     "first_name" : "Doe",
@@ -173,7 +195,7 @@ This will print out the object below.
 ```
 
 #### 4. Convert fieldJson to FDF data
-````javascript
+```javascript
 var pdfFiller   = require('pdffiller');
 
 var fieldJson = [
@@ -221,10 +243,10 @@ var fieldJson = [
 
 var FDFData = pdfFiller.convFieldJson2FDF( fieldJson );
 console.log(FDFData)
-````
+```
 
 This will print out this
-````
+```json
 {
     "last_name" : "John",
     "first_name" : "Doe",
@@ -235,4 +257,4 @@ This will print out this
     "hockey" : "Yes",
     "nascar" : "Off"
 };
-````
+```
