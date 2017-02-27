@@ -14,7 +14,7 @@
         fs = require('fs');
     
     var defaultOpts = {
-        keepFields: false
+        keepExistingValues: false
     };
 
     var pdffiller = {
@@ -78,12 +78,12 @@
 
                     currField['title'] = field.match(regName)[1].trim() || '';
 
-                    if(field.match(regType)){
+                    if(this.currOptions.keepExistingValues && field.match(regType)){
                         currField['fieldType'] = field.match(regType)[1].trim() || '';
                     }else {
                         currField['fieldType'] = '';
                     }
-
+                     
                     if(field.match(regFlags)){
                         currField['fieldFlags'] = field.match(regFlags)[1].trim() || '';
                     }else{
@@ -142,7 +142,6 @@
                     if ( err ) {
                         return callback(err);
                     }
-                    // console.log( 'Sucessfully deleted temp file ' + tempFDF );
                     return callback();
                 });
             } );
