@@ -13,8 +13,7 @@ First, run `npm install pdffiller --save` for your app.
 
 Import the module using:
 
-```
-js
+```javascript
 var pdfFiller = require('pdffiller');
 
 // ...
@@ -24,8 +23,7 @@ var pdfFiller = require('pdffiller');
 ## Examples
 
 #### 1.Fill PDF with existing FDF Data
-```
-javascript
+```javascript
 var pdfFiller   = require('pdffiller');
 
 var sourcePDF = "test/test.pdf";
@@ -54,8 +52,7 @@ resulting PDF will be read-only.
 
 Alternatively,
 
-```
-javascript
+```javascript
 
 var shouldFlatten = false;
 
@@ -71,8 +68,7 @@ still editable, as per the `pdftk` command specification.
 
 
 #### 2. Generate FDF Template from PDF
-```
-javascript
+```javascript
 var pdfFiller   = require('pdffiller');
 
 var sourcePDF = "test/test.pdf";
@@ -88,7 +84,7 @@ var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, nameRegex, function(err
 ```
 
 This will print out this
-```
+```json
 {
     "last_name" : "",
     "first_name" : "",
@@ -102,8 +98,7 @@ This will print out this
 ```
 
 #### 3. Map form fields to PDF fields
-```
-javascript
+```javascript
 var pdfFiller = require('pdffiller');
 
 var convMap = {
@@ -165,7 +160,7 @@ console.log(mappedFields);
 ```
 
 This will print out the object below.
-```
+```json
 {
     "last_name" : "John",
     "first_name" : "Doe",
@@ -179,8 +174,7 @@ This will print out the object below.
 ```
 
 #### 4. Convert fieldJson to FDF data
-```
-javascript
+```javascript
 var pdfFiller   = require('pdffiller');
 
 var fieldJson = [
@@ -231,7 +225,7 @@ console.log(FDFData)
 ```
 
 This will print out this
-```
+```json
 {
     "last_name" : "John",
     "first_name" : "Doe",
