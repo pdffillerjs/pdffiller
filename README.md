@@ -19,6 +19,20 @@ var pdfFiller = require('pdffiller');
 // ...
 ```
 
+If you want to keep existing values from a form when using pdffiller make sure to specify this before using the module with the code below.
+
+```javascript
+pdfFiller.setOptions({keepExistingValues: true});
+
+// ...
+```
+
+Development
+-----------
+
+First clone this repository.
+
+Then, run tests with `npm run test` before commencing development.
 
 ## Examples
 
