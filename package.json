@@ -1,6 +1,6 @@
 {
   "name": "pdffiller-keepfields",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "private": false,
   "description": "Take an existing PDF Form and data and PDF Filler will create a new PDF with all given fields populated.",
   "main": "index.js",
