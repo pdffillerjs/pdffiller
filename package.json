@@ -1,6 +1,6 @@
 {
   "name": "pdffiller-keepfields",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "private": false,
   "description": "Take an existing PDF Form and data and PDF Filler will create a new PDF with all given fields populated.",
   "main": "index.js",
@@ -16,7 +16,8 @@
   ],
   "dependencies": {
     "lodash": "~3.8.0",
-    "utf8-fdf-generator": "0.0.3"
+    "utf8-fdf-generator": "0.0.3",
+    "node-flags": "0.1.9"
   },
   "author": {
     "name": "John Taylor, David Baldwynn and Bill Butler"
