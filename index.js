@@ -12,8 +12,16 @@
         fdf = require('utf8-fdf-generator'),
         _ = require('lodash'),
         fs = require('fs');
+    
+    var defaultOpts = {
+        keepFields: false
+    };
 
     var pdffiller = {
+        currOpts: {},
+        setOptions: function(opts){
+            this.currOpts = opts;
+        },
 
         mapForm2PDF: function( formFields, convMap ){
             var tmpFDFData = this.convFieldJson2FDF(formFields);
@@ -150,6 +158,8 @@
 
     };
 
+    pdffiller.setOptions(defaultOpts);
+        
     module.exports = pdffiller;
 
 }())
