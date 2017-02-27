@@ -6,7 +6,7 @@
 *   Description: This PDF filler module takes a data set and creates a filled out
 *                PDF file with the form fields populated.
 */
-(function(){
+(function(opt){
     var child_process = require('child_process'),
         execFile = require('child_process').execFile,
         fdf = require('utf8-fdf-generator'),
@@ -16,6 +16,8 @@
     var defaultOpts = {
         keepExistingValues: false
     };
+
+    opt = opt || {};
 
     var pdffiller = {
         currOpts: {},
@@ -91,11 +93,16 @@
                         currField['fieldFlags'] = '';
                     }
                     
-                    if(field.match(regValue)){
-                        currField['fieldValue'] = field.match(regValue)[1].trim() || '';
+                    if (opt.keep) {
+                        if(field.match(regValue)){
+                            currField['fieldValue'] = field.match(regValue)[1].trim() || '';
+                        }else{
+                            currField['fieldValue'] = '';
+                        }
                     }else{
                         currField['fieldValue'] = '';
                     }
+                    
 
                     fieldArray.push(currField);
                 });

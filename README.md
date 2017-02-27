@@ -4,8 +4,6 @@ PDF Filler (Node.js)
 
 A node.js PDF form field data filler and FDF generator toolkit. This essentially is a wrapper around the PDF Toolkit library <a target="_blank" href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>.
 
-NOTE: pdffiller failed to keep data if it was already included on a form. I added some logic to retain this data if it exists.
-
 Quick start
 -----------
 
@@ -33,6 +31,15 @@ Development
 First clone this repository.
 
 Then, run tests with `npm run test` before commencing development.
+=======
+If you'd like to list out the contents of the form values in your source PDF, import the module as follows:
+
+```
+js
+var pdfFiller = require('pdffiller')({ keep: true });
+
+// ...
+```
 
 ## Examples
 
