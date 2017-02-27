@@ -52,7 +52,7 @@
             var regName = /FieldName: ([^\n]*)/,
                 regType = /FieldType: ([A-Za-z\t .]+)/,
                 regFlags = /FieldFlags: ([0-9\t .]+)/,
-                regValue = /FieldValue: ([^\n]*)/,
+                regValue = /FieldValue: ('.*$)/,
                 fieldArray = [],
                 currField = {};
 
