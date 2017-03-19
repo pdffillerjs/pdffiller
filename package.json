@@ -1,6 +1,10 @@
 {
 
   "name": "pdffiller-stream",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jasonphillips/pdffiller-stream.git"
+  },
   "version": "0.1.0",
   "private": false,
   "description": "Take an existing PDF Form and data and PDF Filler will create a new PDF with all given fields populated.",
