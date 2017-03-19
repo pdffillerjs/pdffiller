@@ -1,72 +1,71 @@
-/*
- *   File:       index.js (pdffiller)
- *   Project:    PDF Filler
- *   Date:       May 2015.
- *
- *   Description: This PDF filler module takes a data set and creates a filled out
- *                PDF file with the form fields populated.
- */
-(function () {
-    var child_process = require('child_process'),
-        execFile = require('child_process').execFile,
-        fdf = require("./fdf.js"),
-        _ = require('lodash'),
-        fs = require('fs');
+var spawn = require('child_process').spawn,
+    fdf = require("./fdf.js"),
+    _ = require('lodash'),
+    fs = require('fs');
 
-    var pdffiller = {
+var pdffiller = {
 
-        mapForm2PDF: function (formFields, convMap) {
-            var tmpFDFData = this.convFieldJson2FDF(formFields);
-            tmpFDFData = _.mapKeys(tmpFDFData, function (value, key) {
-                try {
-                    convMap[key];
-                } catch (err) {
+    mapForm2PDF: function (formFields, convMap) {
+        var tmpFDFData = this.convFieldJson2FDF(formFields);
+        tmpFDFData = _.mapKeys(tmpFDFData, function (value, key) {
+            try {
+                convMap[key];
+            } catch (err) {
 
-                    return key;
-                }
-                return convMap[key];
+                return key;
+            }
+            return convMap[key];
+        });
+
+        return tmpFDFData;
+    },
+
+    convFieldJson2FDF: function (fieldJson) {
+        var _keys = _.map(fieldJson, 'title'),
+            _values = _.map(fieldJson, 'fieldValue');
+
+        _values = _.map(_values, function (val) {
+            if (val === true) {
+                return 'Yes';
+            } else if (val === false) {
+                return 'Off';
+            }
+            return val;
+        });
+
+        var jsonObj = _.zipObject(_keys, _values);
+
+        return jsonObj;
+    },
+
+    generateFieldJson: function (sourceFile, nameRegex) {
+        var regName = /FieldName: ([^\n]*)/,
+            regType = /FieldType: ([A-Za-z\t .]+)/,
+            regFlags = /FieldFlags: ([0-9\t .]+)/,
+            fieldArray = [],
+            currField = {};
+
+        if (nameRegex !== null && (typeof nameRegex) == 'object') regName = nameRegex;
+
+        return new Promise(function (resolve, reject) {
+            var childProcess = spawn("pdftk", [sourceFile, "dump_data_fields_utf8"]);
+            var output = '';
+
+            childProcess.on('error', function (err) {
+                console.log('pdftk exec error: ' + err);
+                reject(err);
             });
 
-            return tmpFDFData;
-        },
-
-        convFieldJson2FDF: function (fieldJson) {
-            var _keys = _.map(fieldJson, 'title'),
-                _values = _.map(fieldJson, 'fieldValue');
-
-            _values = _.map(_values, function (val) {
-                if (val === true) {
-                    return 'Yes';
-                } else if (val === false) {
-                    return 'Off';
-                }
-                return val;
+            childProcess.stdout.on('data', function (data) {
+                output += data;
             });
 
-            var jsonObj = _.zipObject(_keys, _values);
+            childProcess.stdout.on('end', function () {
+                
+                fields = output.split("---").slice(1);
 
-            return jsonObj;
-        },
-
-        generateFieldJson: function (sourceFile, nameRegex, callback) {
-            var regName = /FieldName: ([^\n]*)/,
-                regType = /FieldType: ([A-Za-z\t .]+)/,
-                regFlags = /FieldFlags: ([0-9\t .]+)/,
-                fieldArray = [],
-                currField = {};
-
-            if (nameRegex !== null && (typeof nameRegex) == 'object') regName = nameRegex;
-
-            execFile("pdftk", [sourceFile, "dump_data_fields_utf8"], function (error, stdout, stderr) {
-                if (error) {
-                    console.log('exec error: ' + error);
-                    return callback(error, null);
-                }
-
-                fields = stdout.toString().split("---").slice(1);
                 fields.forEach(function (field) {
                     currField = {};
-
                     currField['title'] = field.match(regName)[1].trim() || '';
 
                     if (field.match(regType)) {
@@ -82,70 +81,99 @@
                     }
 
                     currField['fieldValue'] = '';
-
                     fieldArray.push(currField);
                 });
 
-                return callback(null, fieldArray);
+                resolve(fieldArray);
             });
-        },
 
-        generateFDFTemplate: function (sourceFile, nameRegex, callback) {
-            this.generateFieldJson(sourceFile, nameRegex, function (err, _form_fields) {
-                if (err) {
-                    console.log('exec error: ' + err);
-                    return callback(err, null);
-                }
+        });
+    },
+
+    generateFDFTemplate: function (sourceFile, nameRegex) {
+        return new Promise(function (resolve, reject) {
+
+            this.generateFieldJson(sourceFile, nameRegex).then(function (_form_fields) {
+
                 var _keys = _.map(_form_fields, 'title'),
                     _values = _.map(_form_fields, 'fieldValue'),
                     jsonObj = _.zipObject(_keys, _values);
 
-                return callback(null, jsonObj);
+                resolve(jsonObj);
+
+            }).catch(function (err) {
+
+                reject(err);
 
             });
-        },
+        }.bind(this));
+    },
 
-        fillFormWithOptions: function (sourceFile, destinationFile, fieldValues, shouldFlatten, tempFDFPath, callback) {
+    fillFormWithOptions: function (sourceFile, fieldValues, shouldFlatten) {
+
+        var promised = new Promise(function (resolve, reject) {
 
             //Generate the data from the field values.
             var randomSequence = Math.random().toString(36).substring(7);
             var currentTime = new Date().getTime();
-            var tempFDFFile = "data" + currentTime + randomSequence + ".fdf",
-                tempFDF = (typeof tempFDFPath !== "undefined" ? tempFDFPath + '/' + tempFDFFile : tempFDFFile),
-                formData = fdf.createFdf(fieldValues, tempFDF);
+            var FDFinput = fdf.createFdf(fieldValues);
 
-            var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile];
+            var args = [sourceFile, "fill_form", '-', "output", '-'];
             if (shouldFlatten) {
                 args.push("flatten");
             }
-            execFile("pdftk", args, function (error, stdout, stderr) {
+            
+            var childProcess = spawn("pdftk", args);
 
-                if (error) {
-                    console.log('exec error: ' + error);
-                    return callback(error);
-                }
-                //Delete the temporary fdf file.
-                fs.unlink(tempFDF, function (err) {
-
-                    if (err) {
-                        return callback(err);
-                    }
-                    // console.log( 'Sucessfully deleted temp file ' + tempFDF );
-                    return callback();
-                });
+            childProcess.on('error', function (err) {
+                console.log('pdftk exec error: ' + err);
+                reject(err);
             });
-        },
 
-        fillFormWithFlatten: function (sourceFile, destinationFile, fieldValues, shouldFlatten, callback) {
-            this.fillFormWithOptions(sourceFile, destinationFile, fieldValues, shouldFlatten, undefined, callback);
-        },
+            childProcess.stdout.on('readable', function () {
+                resolve(childProcess.stdout);
+            });
 
-        fillForm: function (sourceFile, destinationFile, fieldValues, callback) {
-            this.fillFormWithFlatten(sourceFile, destinationFile, fieldValues, true, callback);
-        }
+            // now pipe FDF to pdftk
+            childProcess.stdin.write(FDFinput);
+            childProcess.stdin.end();
+            
+        });
 
-    };
+        // bind convenience method toFile for chaining
+        promised.toFile = toFile.bind(null, promised); 
+        return promised;
+    },
 
-    module.exports = pdffiller;
+    fillFormWithFlatten: function (sourceFile, fieldValues, shouldFlatten) {
+        return this.fillFormWithOptions(sourceFile, fieldValues, shouldFlatten);
+    },
 
-}())
+    fillForm: function (sourceFile, fieldValues) {
+        return this.fillFormWithFlatten(sourceFile, fieldValues, true);
+    },
+
+};
+
+/** 
+ * convenience chainable method for writing to a file (see examples)
+ **/
+function toFile (promised, path) {
+    return new Promise(function (resolve, reject) {
+        promised.then(function(stream) {
+
+            var output = fs.createWriteStream(path);
+
+            stream.pipe(output);
+            stream.on('close', function() {
+                output.end();
+                resolve();
+            });
+
+        }).catch(function (error) {
+            reject(error);
+        });
+    });
+}
+
+module.exports = pdffiller;

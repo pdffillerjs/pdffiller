@@ -1,4 +1,39 @@
 var fs = require('fs');
+var _ = require('lodash');
+
+// only this sequence in FDF header requires char codes
+var headerChars = new Buffer(
+    (String.fromCharCode(226)) +
+    (String.fromCharCode(227)) +
+    (String.fromCharCode(207)) +
+    (String.fromCharCode(211)) +
+    "\n"
+);
+
+var header = Buffer.concat([
+    new Buffer("%FDF-1.2\n"),
+    headerChars,
+    new Buffer(
+        "1 0 obj \n" +
+        "<<\n" +
+        "/FDF \n" +
+        "<<\n" +
+        "/Fields [\n"
+    )
+]);
+
+var footer = new Buffer(
+    "]\n" +
+    ">>\n" +
+    ">>\n" +
+    "endobj \n" +
+    "trailer\n" +
+    "\n" +
+    "<<\n" +
+    "/Root 1 0 R\n" +
+    ">>\n" +
+    "%%EOF\n"
+)
 
 var escapeString = function escapeString(value) {
     var out = value.toString();
@@ -6,52 +41,27 @@ var escapeString = function escapeString(value) {
     out = out.replace(/\(/g, "\\(");
     out = out.replace(/\)/g, "\\)");
     out = out.toString("utf8");
-    console.log(out)
     return out;
 }
 
-exports.createFdf = function (data, fileName) {
-    var header, body, footer, dataKeys;
+exports.createFdf = function (data) {    
+    var body = new Buffer([]);
 
-    header = Buffer([]);
-    header = Buffer.concat([header, new Buffer("%FDF-1.2\n")]);
-    header = Buffer.concat([header, new Buffer((String.fromCharCode(226)) + (String.fromCharCode(227)) + (String.fromCharCode(207)) + (String.fromCharCode(211)) + "\n")]);
-    header = Buffer.concat([header, new Buffer("1 0 obj \n")]);
-    header = Buffer.concat([header, new Buffer("<<\n")]);
-    header = Buffer.concat([header, new Buffer("/FDF \n")]);
-    header = Buffer.concat([header, new Buffer("<<\n")]);
-    header = Buffer.concat([header, new Buffer("/Fields [\n")]);
+    _.mapKeys(data, function (value, name) {
+        body = Buffer.concat([
+            body,
+            new Buffer(
+                "<<\n" +
+                "/T (" +
+                escapeString(name) +
+                ")\n" +
+                "/V (" +
+                escapeString(value) +
+                ")\n" +
+                ">>\n"
+            )
+        ]);
+    });
 
-    footer = Buffer([]);
-    footer = Buffer.concat([footer, new Buffer("]\n")]);
-    footer = Buffer.concat([footer, new Buffer(">>\n")]);
-    footer = Buffer.concat([footer, new Buffer(">>\n")]);
-    footer = Buffer.concat([footer, new Buffer("endobj \n")]);
-    footer = Buffer.concat([footer, new Buffer("trailer\n")]);
-    footer = Buffer.concat([footer, new Buffer("\n")]);
-    footer = Buffer.concat([footer, new Buffer("<<\n")]);
-    footer = Buffer.concat([footer, new Buffer("/Root 1 0 R\n")]);
-    footer = Buffer.concat([footer, new Buffer(">>\n")]);
-    footer = Buffer.concat([footer, new Buffer("%%EOF\n")]);
-
-    dataKeys = Object.keys(data);
-
-    body = new Buffer([]);
-
-    for (var i = 0; i < dataKeys.length; i++) {
-        var name = dataKeys[i];
-        var value = data[name];
-
-        body = Buffer.concat([body, new Buffer("<<\n")]);
-        body = Buffer.concat([body, new Buffer("/T (")]);
-
-        body = Buffer.concat([body, new Buffer(escapeString(name))]);
-        body = Buffer.concat([body, new Buffer(")\n")]);
-        body = Buffer.concat([body, new Buffer("/V (")]);
-        body = Buffer.concat([body, new Buffer(escapeString(value))]);
-        body = Buffer.concat([body, new Buffer(")\n")]);
-        body = Buffer.concat([body, new Buffer(">>\n")]);
-    }
-
-    fs.writeFileSync(fileName, Buffer.concat([header, body, footer]));
+    return Buffer.concat([header, body, footer]);
 }
