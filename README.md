@@ -122,13 +122,13 @@ const sourcePDF = "test/test.pdf";
 const destinationPDF =  "test/test_complete.pdf";
 
 const conversionMap = {
+
     "lastName": "last_name",
     "firstName": "first_name",
     "Date": "date",
-    "lastName": "last_name",
     "footballField": "football",
-    "bballField": "basketball",
     "baseballField": "baseball",
+    "bballField": "basketball",
     "hockeyField": "hockey",
     "nascarField": "nascar"
 };
@@ -151,6 +151,7 @@ pdfFiller.mapForm2PDF(data, convMap).then((mappedFields) => {
 
 This will print out the object below.
 ```json
+
 {
     "last_name" : "John",
     "first_name" : "Doe",
@@ -160,12 +161,14 @@ This will print out the object below.
     "basketball" : "Off",
     "hockey" : "Yes",
     "nascar" : "Off"
+
 }
 ```
 
 #### 4. Convert fieldJson to FDF data
 ````javascript
 import pdfFiller from 'pdffiller-stream';
+
 
 const sourcePDF = "test/test.pdf";
 const fieldJson = [
@@ -211,7 +214,9 @@ const fieldJson = [
     }
 ];
 
+
 const FDFData = pdfFiller.convFieldJson2FDF(data);
+
 console.log(FDFData)
 ````
 
