@@ -23,6 +23,9 @@ Then, install this library:
 npm install pdffiller-stream --save
 ```
 
+**Note for MacOS / OSX Developers** - the main `pdftk` package for OSX is currently broken as of OS 10.11, but PDFLabs released an alternative build that should work normally on the platform: https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk_server-2.02-mac_osx-10.11-setup.pkg
+
+
 
 ## Examples
 
