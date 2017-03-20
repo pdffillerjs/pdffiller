@@ -32,7 +32,7 @@ npm install pdffiller-stream --save
 import pdfFiller from 'pdffiller-stream';
 
 const sourcePDF = "test/test.pdf";
-const destinationPDF =  "test/test_complete.pdf";
+
 const data = {
     "last_name" : "John",
     "first_name" : "Doe",
@@ -119,9 +119,6 @@ This will print out this
 ````javascript
 import pdfFiller from 'pdffiller-stream';
 
-const sourcePDF = "test/test.pdf";
-const destinationPDF =  "test/test_complete.pdf";
-
 const conversionMap = {
 
     "lastName": "last_name",
@@ -170,8 +167,6 @@ This will print out the object below.
 ````javascript
 import pdfFiller from 'pdffiller-stream';
 
-
-const sourcePDF = "test/test.pdf";
 const fieldJson = [
     {
         "title" : "last_name",
