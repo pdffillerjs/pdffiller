@@ -125,14 +125,19 @@ var pdffiller = {
             
             var childProcess = spawn("pdftk", args);
 
-            childProcess.on('error', function (err) {
+            childProcess.stderr.on('data', function (err) {
                 console.log('pdftk exec error: ' + err);
                 reject(err);
             });
 
-            childProcess.stdout.on('readable', function () {
+	        function sendData (data) {
+                childProcess.stdout.pause();
+                childProcess.stdout.unshift(data);
                 resolve(childProcess.stdout);
-            });
+                childProcess.stdout.removeListener('data', sendData);
+            };
+
+            childProcess.stdout.on('data', sendData);
 
             // now pipe FDF to pdftk
             childProcess.stdin.write(FDFinput);
@@ -160,12 +165,12 @@ var pdffiller = {
  **/
 function toFile (promised, path) {
     return new Promise(function (resolve, reject) {
-        promised.then(function(stream) {
+        promised.then(function(outputStream) {
 
             var output = fs.createWriteStream(path);
 
-            stream.pipe(output);
-            stream.on('close', function() {
+            outputStream.pipe(output);
+            outputStream.on('close', function() {
                 output.end();
                 resolve();
             });
