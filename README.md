@@ -23,6 +23,9 @@ Then, install this library:
 npm install pdffiller-stream --save
 ```
 
+**Note for MacOS / OSX Developers** - the main `pdftk` package for OSX is currently broken as of OS 10.11, but PDFLabs released an alternative build that should work normally on the platform: https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk_server-2.02-mac_osx-10.11-setup.pkg
+
+
 
 ## Examples
 
@@ -32,7 +35,7 @@ npm install pdffiller-stream --save
 import pdfFiller from 'pdffiller-stream';
 
 const sourcePDF = "test/test.pdf";
-const destinationPDF =  "test/test_complete.pdf";
+
 const data = {
     "last_name" : "John",
     "first_name" : "Doe",
@@ -119,9 +122,6 @@ This will print out this
 ````javascript
 import pdfFiller from 'pdffiller-stream';
 
-const sourcePDF = "test/test.pdf";
-const destinationPDF =  "test/test_complete.pdf";
-
 const conversionMap = {
 
     "lastName": "last_name",
@@ -170,8 +170,6 @@ This will print out the object below.
 ````javascript
 import pdfFiller from 'pdffiller-stream';
 
-
-const sourcePDF = "test/test.pdf";
 const fieldJson = [
     {
         "title" : "last_name",
