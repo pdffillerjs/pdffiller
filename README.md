@@ -7,8 +7,6 @@ PDF Filler Stream
 
 > The goal is cleaner integration, in eg. a microservices context, where it is preferable not to write multiple temporary files to disk and where you may wish to stream the generated pdf directly to a service like AWS.
 
-[![NPM](https://nodei.co/npm/pdffiller-stream.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/pdffiller-stream/)
-
 A node.js PDF form field data filler and FDF generator toolkit. This essentially is a wrapper around the PDF Toolkit library <a target="_blank" href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>.
 
 
