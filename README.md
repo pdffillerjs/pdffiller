@@ -1,7 +1,7 @@
 PDF Filler Stream
 ======
 
-[![npm version](https://badge.fury.io/js/pdffiller-stream.svg)](https://badge.fury.io/js/pdffiller-stream)
+[![npm version](https://badge.fury.io/js/pdffiller-stream.svg)](https://badge.fury.io/js/pdffiller-stream) [![Build Status](https://travis-ci.org/jasonphillips/pdffiller-stream.svg?branch=master)](https://travis-ci.org/jasonphillips/pdffiller-stream)
 
 > This is a fork of the [pdf-filler](https://github.com/pdffillerjs/pdffiller) package, modified to return promises and readable streams, by piping data in/out of a spawned pdftk process instead of temporarily writing files to disk.
 
