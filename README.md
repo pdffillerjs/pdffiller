@@ -71,6 +71,29 @@ pdfFiller.fillForm( sourcePDF, data)
     });
 ```
 
+You can easily stream the resulting data directly to AWS, doing something like this with an instatiated `s3` client:
+
+```javascript
+pdfFiller.fillForm( sourcePDF, data)
+    .then((outputStream) => {
+        const Body = outputStream;
+        const Bucket = 'some-bucket';
+        const Key = 'myFancyNewFilledPDF';
+        const ContentType = 'application/pdf';
+        
+        const uploader = new AWS.S3.ManagedUpload({
+            params: {Bucket, Key, Body, ContentType},
+            service: s3,
+        };
+        
+        uploader.promise().then((data) => {/* do something with AWS response */})
+        
+    }).catch((err) => {
+        console.log(err);
+    });
+
+```
+
 Calling `fillFormWithFlatten()` with `shouldFlatten = false` will leave any unmapped fields still editable, as per the `pdftk` command specification.
 
 ```javascript
