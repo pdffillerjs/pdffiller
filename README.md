@@ -57,8 +57,6 @@ pdfFiller.fillForm( sourcePDF, data)
 
 This will take the test.pdf, fill the fields with the data values and stream a filled in, read-only PDF.
 
-You can use the returned stream to write a file to disk using a standard library like `fs.createWriteStream(desination)`, or send it directly to a service like AWS (which accepts streams as input).
-
 A chainable convenience method `toFile` is attached to the response, if you simply wish to write the stream to a file with no fuss:
 
 ```javascript
@@ -71,7 +69,7 @@ pdfFiller.fillForm( sourcePDF, data)
     });
 ```
 
-You can easily stream the resulting data directly to AWS, doing something like this with an instatiated `s3` client:
+You could also stream the resulting data directly to AWS, doing something like this with an instantiated `s3` client:
 
 ```javascript
 pdfFiller.fillForm( sourcePDF, data)
