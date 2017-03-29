@@ -15,6 +15,12 @@
 
     var pdffiller = {
 
+        _defaultOptions: {
+            dropXFA: false,
+            shouldFlatten: true,
+            tempFDFPath: undefined
+        },
+
         mapForm2PDF: function( formFields, convMap ){
             var tmpFDFData = this.convFieldJson2FDF(formFields);
             tmpFDFData = _.mapKeys(tmpFDFData, function(value, key){
@@ -102,20 +108,23 @@
             }.bind(this));
         },
 
-        fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, shouldFlatten, tempFDFPath, callback ) {
-
+        fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, options, callback ) {
+            var opts = _.merge({}, this._defaultOptions, options);
 
             //Generate the data from the field values.
             var randomSequence = Math.random().toString(36).substring(7);
             var currentTime = new Date().getTime();
             var tempFDFFile =  "temp_data" + currentTime + randomSequence + ".fdf",
-                tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile),
+                tempFDF = (typeof opts.tempFDFPath !== "undefined"? opts.tempFDFPath + '/' + tempFDFFile: tempFDFFile),
 
                 formData = fdf.generator( fieldValues, tempFDF );
 
             var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile];
-            if (shouldFlatten) {
+            if (opts.shouldFlatten) {
                 args.push("flatten");
+            }
+            if (opts.dropXFA) {
+                args.push("drop_xfa");
             }
             execFile( "pdftk", args, function (error, stdout, stderr) {
 
@@ -136,15 +145,17 @@
         },
 
         fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten, callback ) {
-            this.fillFormWithOptions( sourceFile, destinationFile, fieldValues, shouldFlatten, undefined, callback);
+            var options = { shouldFlatten: shouldFlatten };
+            this.fillFormWithOptions( sourceFile, destinationFile, fieldValues, options, callback);
         },
 
         fillForm: function( sourceFile, destinationFile, fieldValues, callback) {
-            this.fillFormWithFlatten( sourceFile, destinationFile, fieldValues, true, callback);
+            var options = { shouldFlatten: true };
+            this.fillFormWithOptions( sourceFile, destinationFile, fieldValues, options, callback);
         }
 
     };
 
     module.exports = pdffiller;
 
-}())
+}());
