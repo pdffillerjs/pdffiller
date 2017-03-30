@@ -13,13 +13,15 @@
         _ = require('lodash'),
         fs = require('fs');
 
-    var pdffiller = {
+    var getFillOptions = function (options) {
+        if (Object.prototype.toString.call(options) === "[object Array]") {
+            return options;
+        }
+        // Handle the old shouldFlatten fillFormWithOptions signature
+        return (options) ? ['flatten'] : [];
+    };
 
-        _defaultOptions: {
-            dropXFA: false,
-            shouldFlatten: true,
-            tempFDFPath: undefined
-        },
+    var pdffiller = {
 
         mapForm2PDF: function( formFields, convMap ){
             var tmpFDFData = this.convFieldJson2FDF(formFields);
@@ -108,24 +110,18 @@
             }.bind(this));
         },
 
-        fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, options, callback ) {
-            var opts = _.merge({}, this._defaultOptions, options);
+        fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, options, tempFDFPath, callback ) {
+            var opts = getFillOptions(options);
 
             //Generate the data from the field values.
             var randomSequence = Math.random().toString(36).substring(7);
             var currentTime = new Date().getTime();
             var tempFDFFile =  "temp_data" + currentTime + randomSequence + ".fdf",
-                tempFDF = (typeof opts.tempFDFPath !== "undefined"? opts.tempFDFPath + '/' + tempFDFFile: tempFDFFile),
+                tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile),
 
                 formData = fdf.generator( fieldValues, tempFDF );
 
-            var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile];
-            if (opts.shouldFlatten) {
-                args.push("flatten");
-            }
-            if (opts.dropXFA) {
-                args.push("drop_xfa");
-            }
+            var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile].concat(opts);
             execFile( "pdftk", args, function (error, stdout, stderr) {
 
                 if ( error ) {
@@ -145,13 +141,12 @@
         },
 
         fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten, callback ) {
-            var options = { shouldFlatten: shouldFlatten };
-            this.fillFormWithOptions( sourceFile, destinationFile, fieldValues, options, callback);
+            var options = (shouldFlatten) ? ['flatten'] : [];
+            this.fillFormWithOptions( sourceFile, destinationFile, fieldValues, options, undefined, callback);
         },
 
         fillForm: function( sourceFile, destinationFile, fieldValues, callback) {
-            var options = { shouldFlatten: true };
-            this.fillFormWithOptions( sourceFile, destinationFile, fieldValues, options, callback);
+            this.fillFormWithFlatten( sourceFile, destinationFile, fieldValues, true, callback);
         }
 
     };

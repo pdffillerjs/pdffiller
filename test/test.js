@@ -53,8 +53,7 @@ describe('pdfFiller Tests', function(){
 
         it('should create an completely filled PDF that is read-only and with an specific temporary folder for FDF files', function(done) {
             this.timeout(15000);
-            var options = { shouldFlatten: true, tempFDFPath: './' };
-            pdfFiller.fillFormWithOptions( source2PDF, dest2PDF, _data, options, function(err) {
+            pdfFiller.fillFormWithOptions( source2PDF, dest2PDF, _data, true, './', function(err) {
                 pdfFiller.generateFieldJson(dest2PDF, null, function(err, fdfData) {
                     fdfData.length.should.equal(0);
                     done();
