@@ -236,3 +236,40 @@ This will print out this
     "nascar" : "Off"
 };
 ````
+
+#### 5. Get Field JSON
+````javascript
+var pdfFiller = require('pdffiller');
+
+var sourcePDF = "test/test.pdf";
+
+// Override the default field name regex. Default: /FieldName: ([^\n]*)/
+var nameRegex = null;  
+
+var FDF_data = pdfFiller.generateFieldJson( sourcePDF, nameRegex, function(err, jsonData) {
+    if (err) throw err;
+    console.log(jsonData);
+});
+````
+
+This will produce an array of fields like the following.
+```
+[
+    {
+      "fieldFlags": "0",
+      "title" : "first_name",
+      "fieldValue": "",
+      "fieldType": "Text",
+      "fieldDefault": "",
+      "fieldOptions": []
+    }, {
+      "fieldFlags": "0",
+      "title" : "first_name",
+      "fieldValue": "",
+      "fieldType": "Button",
+      "fieldDefault": "",
+      "fieldOptions": ["On", "Off"]
+    },
+]
+```
+This can be very helpful when trying to determine what a valid value is to make a checkbox be checked when filling out the PDF.
