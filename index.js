@@ -57,7 +57,7 @@
 
             if(nameRegex !== null && (typeof nameRegex) == 'object' ) regName = nameRegex;
 
-            execFile( "pdftk", [sourceFile, "dump_data_fields_utf8"], function (error, stdout, stderr) {
+            execFile( "pdftk", [sourceFile, "dump_data_fields_utf8"], {"maxBuffer": 1024 * 5000},  function (error, stdout, stderr) {
                 if (error) {
                     console.log('exec error: ' + error);
                     return callback(error, null);
