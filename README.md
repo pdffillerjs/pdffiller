@@ -82,7 +82,7 @@ pdfFiller.fillForm( sourcePDF, data)
         const uploader = new AWS.S3.ManagedUpload({
             params: {Bucket, Key, Body, ContentType},
             service: s3,
-        };
+        });
         
         uploader.promise().then((data) => {/* do something with AWS response */})
         
