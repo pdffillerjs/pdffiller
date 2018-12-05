@@ -48,19 +48,24 @@ exports.createFdf = function (data) {
     var body = new Buffer([]);
 
     _.mapKeys(data, function (value, name) {
-        body = Buffer.concat([
-            body,
-            new Buffer(
-                "<<\n" +
-                "/T (" +
-                escapeString(name) +
-                ")\n" +
-                "/V (" +
-                escapeString(value) +
-                ")\n" +
-                ">>\n"
-            )
-        ]);
+        try {
+            body = Buffer.concat([
+                body,
+                new Buffer(
+                    "<<\n" +
+                    "/T (" +
+                    escapeString(name) +
+                    ")\n" +
+                    "/V (" +
+                    escapeString(value) +
+                    ")\n" +
+                    ">>\n"
+                )
+            ]);
+        } catch (err) {
+            let errMsg = "Cannot escape string: '" + name + ": " + value + "'.";
+            throw Error(errMsg);
+        }
     });
 
     return Buffer.concat([header, body, footer]);
