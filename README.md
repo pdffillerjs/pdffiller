@@ -1,6 +1,11 @@
-PDF Filler (Node.js)
+PDF Filler Stream
 ======
-[![NPM](https://nodei.co/npm/pdffiller.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/pdffiller/)
+
+[![npm version](https://badge.fury.io/js/pdffiller-stream.svg)](https://badge.fury.io/js/pdffiller-stream) [![Build Status](https://travis-ci.org/jasonphillips/pdffiller-stream.svg?branch=master)](https://travis-ci.org/jasonphillips/pdffiller-stream)
+
+> This is a fork of the [pdf-filler](https://github.com/pdffillerjs/pdffiller) package, modified to return promises and readable streams, by piping data in/out of a spawned pdftk process instead of temporarily writing files to disk.
+
+> The goal is cleaner integration, in eg. a microservices context, where it is preferable not to write multiple temporary files to disk and where you may wish to stream the generated pdf directly to a service like AWS.
 
 A node.js PDF form field data filler and FDF generator toolkit. This essentially is a wrapper around the PDF Toolkit library <a target="_blank" href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>.
 
@@ -8,26 +13,28 @@ A node.js PDF form field data filler and FDF generator toolkit. This essentially
 Quick start
 -----------
 
-First, run `npm install pdffiller --save` for your app.
+**You must first have `pdftk` (from pdftk-server, found [here](https://www.pdflabs.com/tools/pdftk-server/)) installed correctly on your platform.**
 
-Import the module using:
+Then, install this library:
 
-```js
-var pdfFiller = require('pdffiller');
-
-// ...
+```bash
+npm install pdffiller-stream --save
 ```
+
+**Note for MacOS / OSX Developers** - the main `pdftk` package for OSX is currently broken as of OS 10.11, but PDFLabs released an alternative build that should work normally on the platform: https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/pdftk_server-2.02-mac_osx-10.11-setup.pkg
+
 
 
 ## Examples
 
 #### 1.Fill PDF with existing FDF Data
-````javascript
-var pdfFiller   = require('pdffiller');
 
-var sourcePDF = "test/test.pdf";
-var destinationPDF =  "test/test_complete.pdf";
-var data = {
+````javascript
+import pdfFiller from 'pdffiller-stream';
+
+const sourcePDF = "test/test.pdf";
+
+const data = {
     "last_name" : "John",
     "first_name" : "Doe",
     "date" : "Jan 1, 2013",
@@ -38,52 +45,86 @@ var data = {
     "nascar" : "Off"
 };
 
-pdfFiller.fillForm( sourcePDF, destinationPDF, data, function(err) {
-    if (err) throw err;
-    console.log("In callback (we're done).");
-});
+pdfFiller.fillForm( sourcePDF, data)
+    .then((outputStream) => {
+        // use the outputStream here;
+        // will be instance of stream.Readable
+    }).catch((err) => {
+        console.log(err);
+    });
 
 ````
 
-This will take the test.pdf, fill the fields with the data values
-and create a complete filled in PDF (test_filled_in.pdf). Note that the
-resulting PDF will be read-only.
+This will take the test.pdf, fill the fields with the data values and stream a filled in, read-only PDF.
 
-Alternatively,
+A chainable convenience method `toFile` is attached to the response, if you simply wish to write the stream to a file with no fuss:
 
-````javascript
+```javascript
+pdfFiller.fillForm( sourcePDF, data)
+    .toFile('outputFile.PDF')
+    .then(() => {
+        // your file has been written 
+    }).catch((err) => {
+        console.log(err);
+    });
+```
 
-var shouldFlatten = false;
+You could also stream the resulting data directly to AWS, doing something like this with an instantiated `s3` client:
 
-pdfFiller.fillFormWithFlatten( sourcePDF, destinationPDF, data, shouldFlatten, function(err) {
-    if (err) throw err;
-    console.log("In callback (we're done).");
-})
-````
+```javascript
+pdfFiller.fillForm( sourcePDF, data)
+    .then((outputStream) => {
+        const Body = outputStream;
+        const Bucket = 'some-bucket';
+        const Key = 'myFancyNewFilledPDF';
+        const ContentType = 'application/pdf';
+        
+        const uploader = new AWS.S3.ManagedUpload({
+            params: {Bucket, Key, Body, ContentType},
+            service: s3,
+        });
+        
+        uploader.promise().then((data) => {/* do something with AWS response */})
+        
+    }).catch((err) => {
+        console.log(err);
+    });
 
-Calling
-`fillFormWithFlatten()` with `shouldFlatten = false` will leave any unmapped fields
-still editable, as per the `pdftk` command specification.
+```
+
+Calling `fillFormWithFlatten()` with `shouldFlatten = false` will leave any unmapped fields still editable, as per the `pdftk` command specification.
+
+```javascript
+
+const shouldFlatten = false;
+
+pdfFiller.fillFormWithFlatten(sourcePDF, data, shouldFlatten)
+    .then((outputStream) {
+        // etc, same as above
+    })
+```
 
 
 #### 2. Generate FDF Template from PDF
-````javascript
-var pdfFiller   = require('pdffiller');
 
-var sourcePDF = "test/test.pdf";
+````javascript
+import pdfFiller from 'pdffiller-stream';
+
+const sourcePDF = "test/test.pdf";
 
 // Override the default field name regex. Default: /FieldName: ([^\n]*)/
-var nameRegex = null;  
+const nameRegex = null;  
 
-var FDF_data = pdfFiller.generateFDFTemplate( sourcePDF, nameRegex, function(err, fdfData) {
-    if (err) throw err;
+const FDF_data = pdfFiller.generateFDFTemplate(sourcePDF, nameRegex).then((fdfData) => {
     console.log(fdfData);
+}).catch((err) => {
+    console.log(err);
 });
 
 ````
 
 This will print out this
-```
+```json
 {
     "last_name" : "",
     "first_name" : "",
@@ -93,14 +134,15 @@ This will print out this
     "basketball" : "",
     "hockey" : "",
     "nascar" : ""
-};
+}
 ```
 
 #### 3. Map form fields to PDF fields
 ````javascript
-var pdfFiller = require('pdffiller');
+import pdfFiller from 'pdffiller-stream';
 
-var convMap = {
+const conversionMap = {
+
     "lastName": "last_name",
     "firstName": "first_name",
     "Date": "date",
@@ -111,55 +153,25 @@ var convMap = {
     "nascarField": "nascar"
 };
 
-var fieldJson = [
-    {
-        "title" : "lastName",
-        "fieldfieldType": "Text",
-        "fieldValue": "John"
-    },
-    {
-        "title" : "firstName",
-        "fieldfieldType": "Text",
-        "fieldValue": "Doe"
-    },
-    {
-        "title" : "Date",
-        "fieldType": "Text",
-        "fieldValue": "Jan 1, 2013"
-    },
-    {
-        "title" : "footballField",
-        "fieldType": "Button",
-        "fieldValue": false
-    },
-    {
-        "title" : "baseballField",
-        "fieldType": "Button",
-        "fieldValue": true
-    },
-    {
-        "title" : "bballField",
-        "fieldType": "Button",
-        "fieldValue": false
-    },
-    {
-        "title" : "hockeyField",
-        "fieldType": "Button",
-        "fieldValue": true
-    },
-    {
-        "title" : "nascarField",
-        "fieldType": "Button",
-        "fieldValue": false
-    }
-];
+const FormFields = {
+    "lastName" : "John",
+    "firstName" : "Doe",
+    "Date" : "Jan 1, 2013",
+    "footballField" : "Off",
+    "baseballField" : "Yes",
+    "bballField" : "Off",
+    "hockeyField" : "Yes",
+    "nascarField" : "Off"
+};
 
-var mappedFields = pdfFiller.mapForm2PDF( fieldJson, convMap );
-console.log(mappedFields);
+pdfFiller.mapForm2PDF(data, convMap).then((mappedFields) => {
+    console.log(mappedFields);
+});
 ````
 
 This will print out the object below.
-```
+```json
+
 {
     "last_name" : "John",
     "first_name" : "Doe",
@@ -169,14 +181,15 @@ This will print out the object below.
     "basketball" : "Off",
     "hockey" : "Yes",
     "nascar" : "Off"
-};
+
+}
 ```
 
 #### 4. Convert fieldJson to FDF data
 ````javascript
-var pdfFiller   = require('pdffiller');
+import pdfFiller from 'pdffiller-stream';
 
-var fieldJson = [
+const fieldJson = [
     {
         "title" : "last_name",
         "fieldfieldType": "Text",
@@ -219,12 +232,15 @@ var fieldJson = [
     }
 ];
 
-var FDFData = pdfFiller.convFieldJson2FDF( fieldJson );
+
+const FDFData = pdfFiller.convFieldJson2FDF(data);
+
 console.log(FDFData)
 ````
 
-This will print out this
-````
+This will print out:
+
+````json
 {
     "last_name" : "John",
     "first_name" : "Doe",
