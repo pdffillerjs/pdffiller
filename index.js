@@ -31,8 +31,8 @@
         },
 
         convFieldJson2FDF: function(fieldJson){
-            var _keys = _.pluck(fieldJson, 'title'),
-                _values = _.pluck(fieldJson, 'fieldValue');
+            var _keys = _.map(fieldJson, 'title'),
+                _values = _.map(fieldJson, 'fieldValue');
 
             _values = _.map(_values, function(val){
                 if(val === true){
