@@ -52,6 +52,7 @@
             var regName = /FieldName: ([^\n]*)/,
                 regType = /FieldType: ([A-Za-z\t .]+)/,
                 regFlags = /FieldFlags: ([0-9\t .]+)/,
+                regValue = /FieldValue: ([0-9\t .]+)/,
                 fieldArray = [],
                 currField = {};
 
@@ -81,7 +82,12 @@
                         currField['fieldFlags'] = '';
                     }
 
-                    currField['fieldValue'] = '';
+
+                    if(field.match(regValue)){
+                        currField['fieldValue'] = field.match(regValue)[1].trim()|| '';
+                    }else{
+                        currField['fieldValue'] = '';
+                    }
 
                     fieldArray.push(currField);
                 });
