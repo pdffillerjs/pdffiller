@@ -30,6 +30,10 @@ uploads/
 *.sublime-project
 *.sublime-workspace
 
+# VSCode editor
+# ==============
+/.vscode
+
 # Eclipse project files
 # =====================
 .project
