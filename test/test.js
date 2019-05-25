@@ -83,49 +83,65 @@ describe('pdfFiller Tests', function(){
                 "fieldFlags": "0",
                 "title" : "first_name",
                 "fieldValue": "",
-                "fieldType": "Text"
+                "fieldType": "Text",
+                "fieldDefault": "",
+                "fieldOptions": []
             },
             {
                 "fieldFlags": "0",
                 "title" : "last_name",
                 "fieldValue": "",
-                "fieldType": "Text"
+                "fieldType": "Text",
+                "fieldDefault": "",
+                "fieldOptions": []
             },
             {
                 "fieldFlags": "0",
                 "title" : "date",
                 "fieldValue": "",
-                "fieldType": "Text"
+                "fieldType": "Text",
+                "fieldDefault": "",
+                "fieldOptions": []
             },
             {
                 "fieldFlags": "0",
                 "title" : "football",
                 "fieldValue": "",
-                "fieldType": "Button"
+                "fieldType": "Button",
+                "fieldDefault": "",
+                "fieldOptions": ["Off", "Yes"]
             },
             {
                 "fieldFlags": "0",
                 "title" : "baseball",
                 "fieldValue": "",
-                "fieldType": "Button"
+                "fieldType": "Button",
+                "fieldDefault": "",
+                "fieldOptions": ["Off", "Yes"]
             },
             {
                 "fieldFlags": "0",
                 "title" : "basketball",
                 "fieldValue": "",
-                "fieldType": "Button"
+                "fieldType": "Button",
+                "fieldDefault": "",
+                "fieldOptions": ["Off", "Yes"]
             },
             {
                 "fieldFlags": "0",
                 "title" : "nascar",
                 "fieldValue": "",
-                "fieldType": "Button"
+                "fieldType": "Button",
+                "fieldDefault": "",
+                "fieldOptions": ["Off", "Yes"]
             },
             {
                 "fieldFlags": "0",
                 "title" : "hockey",
                 "fieldValue": "",
-                "fieldType": "Button"
+                "fieldType": "Button",
+                "fieldDefault": "",
+                "fieldOptions": ["Off", "Yes"]
             }
         ];
 
