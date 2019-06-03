@@ -13,6 +13,14 @@
         _ = require('lodash'),
         fs = require('fs');
 
+    var getFillOptions = function (options) {
+        if (Object.prototype.toString.call(options) === "[object Array]") {
+            return options;
+        }
+        // Handle the old shouldFlatten fillFormWithOptions signature
+        return (options) ? ['flatten'] : [];
+    };
+
     var pdffiller = {
 
         mapForm2PDF: function( formFields, convMap ){
@@ -102,8 +110,8 @@
             }.bind(this));
         },
 
-        fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, shouldFlatten, tempFDFPath, callback ) {
-
+        fillFormWithOptions: function( sourceFile, destinationFile, fieldValues, options, tempFDFPath, callback ) {
+            var opts = getFillOptions(options);
 
             //Generate the data from the field values.
             var randomSequence = Math.random().toString(36).substring(7);
@@ -113,10 +121,7 @@
 
                 formData = fdf.generator( fieldValues, tempFDF );
 
-            var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile];
-            if (shouldFlatten) {
-                args.push("flatten");
-            }
+            var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile].concat(opts);
             execFile( "pdftk", args, function (error, stdout, stderr) {
 
                 if ( error ) {
@@ -136,7 +141,8 @@
         },
 
         fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten, callback ) {
-            this.fillFormWithOptions( sourceFile, destinationFile, fieldValues, shouldFlatten, undefined, callback);
+            var options = (shouldFlatten) ? ['flatten'] : [];
+            this.fillFormWithOptions( sourceFile, destinationFile, fieldValues, options, undefined, callback);
         },
 
         fillForm: function( sourceFile, destinationFile, fieldValues, callback) {
@@ -147,4 +153,4 @@
 
     module.exports = pdffiller;
 
-}())
+}());
