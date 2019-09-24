@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "lodash": "~4.17.11",
-    "utf8-fdf-generator": "0.0.3"
+    "utf8-fdf-generator": "github:pdffillerjs/utf8-fdf-generator"
   },
   "author": {
     "name": "John Taylor and David Baldwynn"
