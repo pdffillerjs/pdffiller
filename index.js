@@ -114,8 +114,6 @@ var pdffiller = {
         var promised = new Promise(function (resolve, reject) {
 
             //Generate the data from the field values.
-            var randomSequence = Math.random().toString(36).substring(7);
-            var currentTime = new Date().getTime();
             var FDFinput = fdf.createFdf(fieldValues);
 
             var args = [sourceFile, "fill_form", '-', "output", '-'];

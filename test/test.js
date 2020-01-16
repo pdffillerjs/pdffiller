@@ -67,6 +67,23 @@ describe('pdfFiller Tests', function(){
                     });
                 });
         });
+
+        it('should handle expanded utf characters and diacritics', function() {
+            var source4PDF = source2PDF;
+            var dest4PDF = "test/test_complete4.pdf";
+            var diacriticsData = Object.assign({}, _data, {
+                "first_name": "मुख्यपृष्ठम्",
+                "last_name": "é àالعقائدية الأخرى",
+            })
+
+            return pdfFiller.fillFormWithFlatten( source4PDF, diacriticsData, false)
+                .toFile(dest4PDF)
+                .then(function() {
+                    return pdfFiller.generateFieldJson(dest4PDF, null).then(function (fdfData) {
+                        fdfData.length.should.not.equal(0);
+                    });
+                });
+        });
     });
 
     describe('generateFieldJson()', function(){
