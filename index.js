@@ -148,8 +148,7 @@
           var randomSequence = Math.random().toString(36).substring(7);
           var currentTime = new Date().getTime();
           var tempFDFFile =  "temp_data" + currentTime + randomSequence + ".fdf",
-              tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile),
-
+              tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile);
 
           var args = [sourceFile, "stamp", stampFile, "output", destinationFile];
   
