@@ -141,6 +141,38 @@
 
         fillForm: function( sourceFile, destinationFile, fieldValues, callback) {
             this.fillFormWithFlatten( sourceFile, destinationFile, fieldValues, true, callback);
+        },
+
+        stampForm: function( sourceFile, stampFile, destinationFile, tempFDFPath, callback ) {
+          //Generate the data from the field values.
+          var randomSequence = Math.random().toString(36).substring(7);
+          var currentTime = new Date().getTime();
+          var tempFDFFile =  "temp_data" + currentTime + randomSequence + ".fdf",
+              tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile),
+
+
+          var args = [sourceFile, "stamp", stampFile, "output", destinationFile];
+  
+          execFile( "pdftk", args, function (error, stdout, stderr) {
+
+              if ( error ) {
+                  console.log('exec error: ' + error);
+                  return callback(error);
+              }
+              //Delete the temporary fdf file.
+              fs.unlink( tempFDF, function( err ) {
+
+                  if ( err ) {
+                      return callback(err);
+                  }
+                  // console.log( 'Sucessfully deleted temp file ' + tempFDF );
+                  return callback();
+              });
+          } );
+        },
+
+        stampPDF: function ( sourceFile, stampFile, destinationFile, callback) {
+          this.stampForm( sourceFile, stampFile, destinationFile, callback);
         }
 
     };
