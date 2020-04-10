@@ -145,11 +145,6 @@
 
         stampForm: function( sourceFile, stampFile, destinationFile, tempFDFPath, callback ) {
           //Generate the data from the field values.
-          var randomSequence = Math.random().toString(36).substring(7);
-          var currentTime = new Date().getTime();
-          var tempFDFFile =  "temp_data" + currentTime + randomSequence + ".fdf",
-              tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile);
-
           var args = [sourceFile, "stamp", stampFile, "output", destinationFile];
   
           execFile( "pdftk", args, function (error, stdout, stderr) {
