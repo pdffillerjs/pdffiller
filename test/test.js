@@ -14,6 +14,10 @@ var dest2PDF =  "test/test_complete2.pdf",
     dest1PDF =  "test/test_complete1.pdf",
     source1PDF = "test/test1.pdf";
 
+var pirfForm = "test/output.pdf",
+    stampForm = "test/download.pdf",
+    destStamp = "test/stamped.pdf";
+
 
 /**
  * Unit tests
@@ -319,5 +323,21 @@ describe('pdfFiller Tests', function(){
             done();
         });
     });
+
+    describe('stampForm()', function(){
+
+
+      it('should create a stamped pdf', function(done) {
+          this.timeout(15000);
+          pdfFiller.stampForm( pirfForm, stampForm, destStamp, undefined, function() {
+            done();
+            
+          });
+      });
+
+  
+  });
+
+    
 
 });
