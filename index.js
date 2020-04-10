@@ -153,15 +153,9 @@
                   console.log('exec error: ' + error);
                   return callback(error);
               }
-              //Delete the temporary fdf file.
-              fs.unlink( tempFDF, function( err ) {
-
-                  if ( err ) {
-                      return callback(err);
-                  }
-                  // console.log( 'Sucessfully deleted temp file ' + tempFDF );
-                  return callback();
-              });
+     
+              // console.log( 'Sucessfully deleted temp file ' + tempFDF );
+              return callback();
           } );
         },
 
