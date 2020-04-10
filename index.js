@@ -171,7 +171,7 @@
         },
 
         stampPDF: function ( sourceFile, stampFile, destinationFile, callback) {
-          this.stampForm( sourceFile, stampFile, destinationFile, callback);
+          this.stampForm( sourceFile, stampFile, destinationFile, undefined,callback);
         }
 
     };

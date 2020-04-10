@@ -329,7 +329,7 @@ describe('pdfFiller Tests', function(){
 
       it('should create a stamped pdf', function(done) {
           this.timeout(15000);
-          pdfFiller.stampForm( pirfForm, stampForm, destStamp, undefined, function(done) {
+          pdfFiller.stampForm( pirfForm, stampForm, destStamp, undefined, function() {
             done();
             
           });
