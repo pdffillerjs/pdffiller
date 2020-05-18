@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "lodash": "~4.17.11",
-    "utf8-fdf-generator": "0.0.3"
+    "xfdf": "^1.0.0"
   },
   "author": {
     "name": "John Taylor and David Baldwynn"

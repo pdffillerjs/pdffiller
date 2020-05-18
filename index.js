@@ -7,10 +7,9 @@
 *                PDF file with the form fields populated.
 */
 (function(){
-    var child_process = require('child_process'),
-        execFile = require('child_process').execFile,
-        fdf = require('utf8-fdf-generator'),
-        _ = require('lodash'),
+    var execFile = require('child_process').execFile
+    var xfdf = require('xfdf')
+    var _ = require('lodash')
         fs = require('fs');
 
     var pdffiller = {
@@ -108,31 +107,41 @@
             //Generate the data from the field values.
             var randomSequence = Math.random().toString(36).substring(7);
             var currentTime = new Date().getTime();
-            var tempFDFFile =  "temp_data" + currentTime + randomSequence + ".fdf",
-                tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile),
+            var tempFDFFile =  "temp_data" + currentTime + randomSequence + ".fdf"
+            var tempFDF = (typeof tempFDFPath !== "undefined"? tempFDFPath + '/' + tempFDFFile: tempFDFFile)
 
-                formData = fdf.generator( fieldValues, tempFDF );
+            var builder = new xfdf({ pdf: tempFDF });
+            Object
+              .entries(fieldValues)
+              .forEach(([key, value]) => builder.addField(key, value))
+
+          var formData = builder.generate(tempFDFFile)
+          const fs = require('fs')
+          fs.writeFile(tempFDFFile, formData, (err, _result) => {
+            if (err) throw err
 
             var args = [sourceFile, "fill_form", tempFDF, "output", destinationFile];
             if (shouldFlatten) {
-                args.push("flatten");
+              args.push("flatten");
             }
+            
             execFile( "pdftk", args, function (error, stdout, stderr) {
-
-                if ( error ) {
-                    console.log('exec error: ' + error);
-                    return callback(error);
+              
+              if ( error ) {
+                console.log('exec error: ' + error);
+                return callback(error);
+              }
+              //Delete the temporary fdf file.
+              fs.unlink( tempFDF, function( err ) {
+                
+                if ( err ) {
+                  return callback(err);
                 }
-                //Delete the temporary fdf file.
-                fs.unlink( tempFDF, function( err ) {
-
-                    if ( err ) {
-                        return callback(err);
-                    }
-                    // console.log( 'Sucessfully deleted temp file ' + tempFDF );
-                    return callback();
-                });
+                // console.log( 'Sucessfully deleted temp file ' + tempFDF );
+                return callback();
+              });
             } );
+          })
         },
 
         fillFormWithFlatten: function( sourceFile, destinationFile, fieldValues, shouldFlatten, callback ) {
