@@ -1,7 +1,7 @@
 {
   "name": "pdffiller",
   "version": "0.0.11",
-  "private": false,
+  "private": true,
   "description": "Take an existing PDF Form and data and PDF Filler will create a new PDF with all given fields populated.",
   "main": "index.js",
   "scripts": {

@@ -1,6 +1,11 @@
+# Package original: [pdffiller](https://www.npmjs.com/package/pdffiller)
+
+## ATENÇÃO
+
+Somente adicionado dependencia xfdf para rodar em todos os SO's, em sua essência a lib é a mesma que a linkada acima
+
 PDF Filler (Node.js)
 ======
-[![NPM](https://nodei.co/npm/pdffiller.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/pdffiller/)
 
 A node.js PDF form field data filler and FDF generator toolkit. This essentially is a wrapper around the PDF Toolkit library <a target="_blank" href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">PDF ToolKit</a>.
 
